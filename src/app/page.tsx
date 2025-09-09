@@ -10,10 +10,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { useState } from 'react';
 
 const modelProfile = {
-  name: 'Alexina Graham',
+  name: 'Camila Hot',
   bio: "International Model | Victoria's Secret Angel | L'Oréal Paris Ambassador. Spreading positivity one post at a time.",
   agency: 'IMG Models',
-  profilePicture: 'https://cdn.openart.ai/uploads/image_DohdSgBp_1757401223173_raw.jpg',
+  profilePicture: 'https://cdn.openart.ai/uploads/image_9YFkLViJ_1757401222855_raw.jpg',
   coverPhoto: 'https://picsum.photos/1600/600',
   stats: {
     posts: 1240,
