@@ -9,35 +9,35 @@ const creators = [
   {
     name: 'Aitana Lopez',
     description: 'AI Creator | 350k+ followers',
-    image: 'https://cdn.openart.ai/uploads/image_Q4Exqj4e_1715024209590_raw.jpg',
+    image: 'https://picsum.photos/seed/1/400/600',
     slug: 'camila-hot',
     dataAiHint: 'female creator'
   },
   {
     name: 'Darren Till',
     description: 'UFC Title Contender',
-    image: 'https://cdn.openart.ai/uploads/image_TEh2p37s_1715024237699_raw.jpg',
+    image: 'https://picsum.photos/seed/2/400/600',
     slug: 'camila-hot',
     dataAiHint: 'male boxer'
   },
   {
     name: 'Lana Scolaro',
     description: 'DJ | 2.1m followers',
-    image: 'https://cdn.openart.ai/uploads/image_syx23vEk_1715024255018_raw.jpg',
+    image: 'https://picsum.photos/seed/3/400/600',
     slug: 'camila-hot',
     dataAiHint: 'female dj'
   },
   {
     name: 'Chesca',
     description: 'Music Artist | 480k followers',
-    image: 'https://cdn.openart.ai/uploads/image_yO49g2Bw_1715024279294_raw.jpg',
+    image: 'https://picsum.photos/seed/4/400/600',
     slug: 'camila-hot',
     dataAiHint: 'female singer'
   },
   {
     name: 'Ben Morris',
     description: 'YouTube | 770k subscribers',
-    image: 'https://cdn.openart.ai/uploads/image_92GKqSgE_1715024294432_raw.jpg',
+    image: 'https://picsum.photos/seed/5/400/600',
     slug: 'camila-hot',
     dataAiHint: 'male youtuber'
   },
@@ -133,3 +133,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
