@@ -88,7 +88,7 @@ export default function LandingPage() {
               <div className="flex justify-center md:justify-start mb-4">
                 <div className="flex -space-x-3">
                   {creators.slice(0, 5).map((creator, index) => (
-                    <Image key={creator.name} src={creator.image} alt={creator.name} width={48} height={48} className="rounded-full border-2 border-[#111111]" data-ai-hint={creator.dataAiHint} />
+                    <Image key={creator.name} src={creator.image} alt={creator.name} width={48} height={48} className="rounded-full border-2 border-[#161618]" data-ai-hint={creator.dataAiHint} />
                   ))}
                 </div>
               </div>
