@@ -61,26 +61,28 @@ export default function LandingPage() {
     <div className="bg-white text-black">
       {/* Hero Section */}
       <div className="bg-[#161618] text-white">
-        <header className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <DFansLogo />
-            <span className="font-bold text-xl">dfans.co</span>
+        <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16 sm:h-20">
+              <div className="flex items-center gap-2">
+                <DFansLogo />
+                <span className="font-bold text-xl">dfans.co</span>
+              </div>
+              <nav className="hidden md:flex items-center gap-8 text-sm">
+                <Link href="#" className="hover:text-gray-300">dFans AI</Link>
+                <Link href="#" className="hover:text-gray-300">Video Guide</Link>
+                <Link href="#" className="hover:text-gray-300">FAQ</Link>
+                <Link href="#" className="hover:text-gray-300">Log in</Link>
+                <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6 hover:from-[#FF2541] hover:to-[#FF9A02]">
+                  Sign up
+                </Button>
+              </nav>
+              <Button className="md:hidden bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-4">
+                Sign up
+              </Button>
           </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm">
-            <Link href="#" className="hover:text-gray-300">dFans AI</Link>
-            <Link href="#" className="hover:text-gray-300">Video Guide</Link>
-            <Link href="#" className="hover:text-gray-300">FAQ</Link>
-            <Link href="#" className="hover:text-gray-300">Log in</Link>
-            <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6 hover:from-[#FF2541] hover:to-[#FF9A02]">
-              Sign up
-            </Button>
-          </nav>
-          <Button className="md:hidden bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-4">
-            Sign up
-          </Button>
         </header>
 
-        <main className="container mx-auto px-6 pt-16 pb-16 md:pb-0">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-center md:text-left">
               <div className="flex justify-center md:justify-start mb-4">
@@ -140,5 +142,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
