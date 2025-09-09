@@ -83,11 +83,3 @@
   }
 }
 
-
-
-@media (width >= 1024px) {
-  .lg\:px-8 {
-      padding-left: 5rem !important;
-      padding-right: 5rem !important ;
-  }
-}
