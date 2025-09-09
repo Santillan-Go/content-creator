@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Eye, ImageIcon, Video, Copy, CheckCircle } from 'lucide-react';
+import { Eye, ImageIcon, Video, Copy } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useState } from 'react';
@@ -25,6 +25,23 @@ const modelProfile = {
     images: Array.from({ length: 3 + (i % 2) }, (v, j) => `https://picsum.photos/seed/${i * 4 + j + 1}/600/800`),
   })),
 };
+
+const VerifiedIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.03 15.44l-4.24-4.24 1.41-1.41 2.83 2.83 5.66-5.66 1.41 1.41-7.07 7.07z"
+        fill="#1d9bf0"
+      />
+    </svg>
+  );
 
 export default function Home() {
   const [selectedPost, setSelectedPost] = useState<typeof modelProfile.posts[0] | null>(null);
@@ -57,7 +74,7 @@ export default function Home() {
         <div className="pt-20 pb-10 px-4 sm:px-6 lg:px-8 text-center">
             <div className="flex items-center justify-center gap-2">
             <h1 className="text-3xl md:text-4xl font-bold font-headline">{modelProfile.name}</h1>
-            <CheckCircle className="h-6 w-6 text-blue-500" />
+            <VerifiedIcon />
           </div>
           <p className="text-muted-foreground mt-1">
             Agency: <span className="text-foreground">{modelProfile.agency}</span>
