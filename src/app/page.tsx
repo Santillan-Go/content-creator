@@ -57,7 +57,7 @@ export default function Home() {
         <div className="pt-20 pb-10 px-4 sm:px-6 lg:px-8 text-center">
             <div className="flex items-center justify-center gap-2">
             <h1 className="text-3xl md:text-4xl font-bold font-headline">{modelProfile.name}</h1>
-            <CheckCircle className="h-6 w-6 text-primary" />
+            <CheckCircle className="h-6 w-6 text-blue-500" />
           </div>
           <p className="text-muted-foreground mt-1">
             Agency: <span className="text-foreground">{modelProfile.agency}</span>
