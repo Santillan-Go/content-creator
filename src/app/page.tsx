@@ -102,7 +102,7 @@ export default function LandingPage() {
                 <span className="text-xl font-bold">Winkermind</span>
               </Link>
               <nav className="hidden md:flex items-center gap-4 text-sm">
-                <Link href="#" className="text-white hover:text-gray-300 transition-colors">Creadores</Link>
+                <Link href="/creators" className="text-white hover:text-gray-300 transition-colors">Creadores</Link>
                 <Link href="#" className="text-white hover:text-gray-300 transition-colors">Videos</Link>
                 <Link href="#" className="text-white hover:text-gray-300 transition-colors">FAQ</Link>
                 <Link href="#" className="text-white hover:text-gray-300 transition-colors">Log in</Link>
@@ -117,8 +117,8 @@ export default function LandingPage() {
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-center justify-center">
-              <div className="text-center md:text-left md:w-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
+              <div className="text-center md:text-left">
                   <div className="flex justify-center md:justify-start mb-4">
                       <div className="flex -space-x-3">
                           {creators.slice(0, 5).map((creator) => (
@@ -132,13 +132,15 @@ export default function LandingPage() {
                 <h1 className="text-5xl md:text-5xl font-black leading-tight mb-4">Encuentra cientos de creadores</h1>
                 <p className="text-gray-400 text-lg mb-8 max-w-md mx-auto md:mx-0">Sin censura, alta privacidad y acceso gratuito.</p>
                 <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
-                  <Button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full px-8 py-6 text-lg hover:from-yellow-500 hover:to-orange-600">Explorar Creadores</Button>
+                  <Link href="/creators">
+                    <Button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full px-8 py-6 text-lg hover:from-yellow-500 hover:to-orange-600">Explorar Creadores</Button>
+                  </Link>
                   <Button variant="link" className="text-white font-semibold text-lg bg-gradient-to-r from-pink-500 to-purple-600 rounded-full py-3 px-5 transition-colors">Registrate</Button>
                 </div>
                 <p className="text-xs text-gray-500 mt-4">*Registrate sin costo para poder ver más contenido exclusivo*</p>
               </div>
-              <div className="relative mt-12 md:w-auto">
-                <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={700} height={644} className="mx-auto object-contain" data-ai-hint="app screenshot" />
+              <div className="relative mt-12 md:mt-0">
+                <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={600} height={550} className="mx-auto object-contain" data-ai-hint="app screenshot" />
               </div>
           </div>
         </main>
