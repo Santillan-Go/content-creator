@@ -77,17 +77,13 @@ export default function Home() {
             </div>
           </Card>
         </div>
-
-        <div className="p-4 sm:p-6 lg:p-8">
-          <AiSuggestions />
-        </div>
         
         <div className="p-4 sm:px-6 lg:px-8">
           <Separator className="my-6" />
           <h2 className="text-2xl font-bold font-headline mb-6 text-center sm:text-left">Gallery</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 gap-1">
             {modelProfile.posts.map((post) => (
-              <Card key={post.id} className="overflow-hidden group transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <Card key={post.id} className="overflow-hidden group transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl aspect-w-1 aspect-h-1">
                 <div className="aspect-[3/4]">
                   <Image
                     src={post.imageUrl}
