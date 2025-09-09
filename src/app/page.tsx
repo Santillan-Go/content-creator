@@ -71,31 +71,38 @@ export default function LandingPage() {
             <Link href="#" className="hover:text-gray-300">Video Guide</Link>
             <Link href="#" className="hover:text-gray-300">FAQ</Link>
             <Link href="#" className="hover:text-gray-300">Log in</Link>
-            <Button className="bg-gradient-to-r from-yellow-400 to-pink-500 text-white rounded-full px-6">
+            <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6">
               Sign up
             </Button>
           </nav>
-          <Button className="md:hidden bg-gradient-to-r from-yellow-400 to-pink-500 text-white rounded-full px-4">
+          <Button className="md:hidden bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-4">
             Sign up
           </Button>
         </header>
 
-        <main className="container mx-auto px-6 pt-16 pb-24 text-center">
-          <div className="flex justify-center mb-4">
-            {creators.slice(0, 5).map((creator, index) => (
-              <div key={creator.name} className="-ml-3">
-                <Image src={creator.image} alt={creator.name} width={48} height={48} className="rounded-full border-2 border-[#111111]" data-ai-hint={creator.dataAiHint} />
+        <main className="container mx-auto px-6 pt-16 pb-24">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="text-center md:text-left">
+              <div className="flex justify-center md:justify-start mb-4">
+                <div className="flex -space-x-3">
+                  {creators.slice(0, 5).map((creator, index) => (
+                    <Image key={creator.name} src={creator.image} alt={creator.name} width={48} height={48} className="rounded-full border-2 border-[#111111]" data-ai-hint={creator.dataAiHint} />
+                  ))}
+                </div>
               </div>
-            ))}
+              <p className="text-sm text-gray-400 mb-6">Loved by 100,000+ Creators</p>
+              <h1 className="text-5xl md:text-7xl font-bold mb-4">The Decentralized<br />Creator's Platform</h1>
+              <p className="text-gray-400 mb-8 max-w-md mx-auto md:mx-0">Less Censorship. More Privacy. Faster Payouts. Future-Ready.</p>
+              <div className="flex justify-center md:justify-start items-center gap-4">
+                <Button className="bg-gradient-to-r from-yellow-400 to-pink-500 text-black font-bold rounded-full px-8 py-6 text-lg">Become a creator</Button>
+                <Link href="#" className="text-white font-semibold text-lg">Sign up as a Fan</Link>
+              </div>
+              <p className="text-xs text-gray-500 mt-2">It's free and takes less than a minute!</p>
+            </div>
+            <div className="relative">
+              <Image src="https://picsum.photos/800/1000" alt="App screenshot" width={800} height={1000} className="rounded-3xl mx-auto" data-ai-hint="app screenshot" />
+            </div>
           </div>
-          <p className="text-sm text-gray-400 mb-6">Loved by 100,000+ Creators</p>
-          <h1 className="text-5xl md:text-7xl font-bold mb-4">The Decentralized<br />Creator's Platform</h1>
-          <p className="text-gray-400 mb-8 max-w-md mx-auto">Less Censorship. More Privacy. Faster Payouts. Future-Ready.</p>
-          <div className="flex justify-center items-center gap-4">
-            <Button className="bg-gradient-to-r from-yellow-400 to-pink-500 text-white rounded-full px-8 py-6 text-lg">Become a creator</Button>
-            <Link href="#" className="text-white font-semibold text-lg">Sign up as a Fan</Link>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">It's free and takes less than a minute!</p>
         </main>
       </div>
 
