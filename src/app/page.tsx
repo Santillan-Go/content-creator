@@ -82,9 +82,9 @@ export default function LandingPage() {
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="text-center md:text-left">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-5 gap-8 items-center">
+            <div className="md:col-span-3 text-center md:text-left">
               <div className="flex justify-center md:justify-start mb-4">
                 <div className="flex -space-x-3">
                   {creators.slice(0, 5).map((creator) => (
@@ -103,7 +103,7 @@ export default function LandingPage() {
               </div>
               <p className="text-xs text-gray-500 mt-2">It's free and takes less than a minute!</p>
             </div>
-            <div className="relative h-full hidden md:block">
+            <div className="md:col-span-2 relative h-full hidden md:block">
               <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={450} height={644} className="mx-auto object-contain h-full w-auto" data-ai-hint="app screenshot" />
             </div>
           </div>
