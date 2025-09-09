@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Eye, ImageIcon, Video, Copy } from 'lucide-react';
+import { Eye, ImageIcon, Video, Copy, CheckCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useState } from 'react';
@@ -55,7 +55,10 @@ export default function Home() {
         </div>
 
         <div className="pt-20 pb-10 px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold font-headline">{modelProfile.name}</h1>
+            <div className="flex items-center justify-center gap-2">
+            <h1 className="text-3xl md:text-4xl font-bold font-headline">{modelProfile.name}</h1>
+            <CheckCircle className="h-6 w-6 text-primary" />
+          </div>
           <p className="text-muted-foreground mt-1">
             Agency: <span className="text-foreground">{modelProfile.agency}</span>
           </p>
@@ -89,11 +92,13 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-1">
             {modelProfile.posts.map((post) => (
               <Dialog key={post.id} onOpenChange={(open) => {
-                if (!open) {
+                if (open) {
+                  setSelectedPost(post);
+                } else {
                   setSelectedPost(null);
                 }
               }}>
-                <DialogTrigger asChild onClick={() => setSelectedPost(post)}>
+                <DialogTrigger asChild>
                   <Card className="overflow-hidden group relative">
                      <div className="absolute top-2 right-2 z-10 text-white">
                       <Copy size={16} />
