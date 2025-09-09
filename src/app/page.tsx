@@ -60,7 +60,7 @@ export default function LandingPage() {
   return (
     <div className="bg-white text-black">
       {/* Hero Section */}
-      <div className="bg-[#111111] text-white">
+      <div className="bg-[#161618] text-white">
         <header className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <DFansLogo />
@@ -99,8 +99,8 @@ export default function LandingPage() {
               </div>
               <p className="text-xs text-gray-500 mt-2">It's free and takes less than a minute!</p>
             </div>
-            <div className="relative">
-              <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={450} height={900} className="rounded-3xl mx-auto" data-ai-hint="app screenshot" />
+            <div className="relative h-full">
+              <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={450} height={900} className="rounded-3xl mx-auto object-contain h-full w-auto" data-ai-hint="app screenshot" />
             </div>
           </div>
         </main>
