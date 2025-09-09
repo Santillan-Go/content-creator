@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'dfans.co',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

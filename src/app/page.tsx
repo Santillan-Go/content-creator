@@ -100,7 +100,7 @@ export default function LandingPage() {
               <p className="text-xs text-gray-500 mt-2">It's free and takes less than a minute!</p>
             </div>
             <div className="relative">
-              <Image src="https://picsum.photos/800/1000" alt="App screenshot" width={800} height={1000} className="rounded-3xl mx-auto" data-ai-hint="app screenshot" />
+              <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={450} height={900} className="rounded-3xl mx-auto" data-ai-hint="app screenshot" />
             </div>
           </div>
         </main>
@@ -140,5 +140,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
