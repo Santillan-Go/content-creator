@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, ChevronDown, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useState, useMemo } from 'react';
 
 const creators = [
   {
@@ -373,6 +374,17 @@ const creators = [
 ];
 
 export default function CreatorsPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredCreators = useMemo(() => {
+    if (!searchQuery) {
+      return creators;
+    }
+    return creators.filter((creator) =>
+      creator.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <header className="bg-white border-b">
@@ -410,6 +422,8 @@ export default function CreatorsPage() {
                             type="search" 
                             placeholder="Search creators..." 
                             className="bg-gray-100 border-gray-200 pl-10 text-gray-900 placeholder:text-gray-500 focus:ring-pink-500"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                     </div>
@@ -421,7 +435,7 @@ export default function CreatorsPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {creators.map((creator) => (
+          {filteredCreators.map((creator) => (
             <Link href={`/creators/${creator.slug}`} key={creator.name}>
                 <Card className="bg-white border-gray-200 rounded-xl overflow-hidden group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                     <div className="relative h-24">
@@ -459,3 +473,5 @@ export default function CreatorsPage() {
     </div>
   );
 }
+
+    
