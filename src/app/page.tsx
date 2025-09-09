@@ -92,7 +92,7 @@ export default function LandingPage() {
   return (
     <div className="bg-[#161618] text-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-black via-black to-[#161618]">
+      <div className="bg-gradient-to-b from-black to-[#161618]">
         <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-20">
               <Link href="/" aria-label="Home" className="flex items-center gap-2">
@@ -117,12 +117,12 @@ export default function LandingPage() {
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-center justify-between py-12 md:py-24">
-              <div className="text-center md:text-left md:w-1/2">
+            <div className="flex flex-col md:flex-row items-center justify-center py-12 md:py-24 gap-8">
+              <div className="text-center md:text-left md:w-auto">
                   <div className="flex justify-center md:justify-start mb-4">
                       <div className="flex -space-x-3">
                           {creators.slice(0, 5).map((creator) => (
-                            <div key={creator.name} className="w-12 h-12 rounded-full border-2 border-[#161618] overflow-hidden">
+                             <div key={creator.name} className="w-12 h-12 rounded-full border-2 border-[#161618] overflow-hidden">
                                 <Image src={creator.image} alt={creator.name} width={48} height={48} className="object-cover w-full h-full" data-ai-hint={creator.dataAiHint} />
                             </div>
                           ))}
@@ -137,8 +137,8 @@ export default function LandingPage() {
                 </div>
                 <p className="text-xs text-gray-500 mt-4">*Registrate sin costo para poder ver más contenido exclusivo*</p>
               </div>
-              <div className="relative mt-12 md:mt-0 md:w-1/2">
-                <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={700} height={644} className="mx-auto object-contain" data-ai-hint="app screenshot" />
+              <div className="relative mt-12 md:mt-0 md:w-auto">
+                <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={400} height={644} className="mx-auto object-contain" data-ai-hint="app screenshot" />
               </div>
           </div>
         </main>
