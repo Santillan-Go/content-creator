@@ -71,7 +71,7 @@ export default function LandingPage() {
             <Link href="#" className="hover:text-gray-300">Video Guide</Link>
             <Link href="#" className="hover:text-gray-300">FAQ</Link>
             <Link href="#" className="hover:text-gray-300">Log in</Link>
-            <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6">
+            <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6 hover:from-[#FF2541] hover:to-[#FF9A02]">
               Sign up
             </Button>
           </nav>
@@ -80,7 +80,7 @@ export default function LandingPage() {
           </Button>
         </header>
 
-        <main className="container mx-auto px-6 pt-16 pb-24">
+        <main className="container mx-auto px-6 pt-16 pb-16 md:pb-0">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-center md:text-left">
               <div className="flex justify-center md:justify-start mb-4">
@@ -93,14 +93,14 @@ export default function LandingPage() {
               <p className="text-sm text-gray-400 mb-6">Loved by 100,000+ Creators</p>
               <h1 className="text-5xl md:text-7xl font-bold mb-4">The Decentralized<br />Creator's Platform</h1>
               <p className="text-gray-400 mb-8 max-w-md mx-auto md:mx-0">Less Censorship. More Privacy. Faster Payouts. Future-Ready.</p>
-              <div className="flex justify-center md:justify-start items-center gap-4">
-                <Button className="bg-gradient-to-r from-yellow-400 to-pink-500 text-black font-bold rounded-full px-8 py-6 text-lg">Become a creator</Button>
+              <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
+                <Button className="bg-gradient-to-r from-yellow-400 to-pink-500 text-black font-bold rounded-full px-8 py-6 text-lg hover:from-[#FF2541] hover:to-[#FF9A02] hover:text-white">Become a creator</Button>
                 <Link href="#" className="text-white font-semibold text-lg">Sign up as a Fan</Link>
               </div>
               <p className="text-xs text-gray-500 mt-2">It's free and takes less than a minute!</p>
             </div>
-            <div className="relative h-full">
-              <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={450} height={900} className="rounded-3xl mx-auto object-contain h-full w-auto" data-ai-hint="app screenshot" />
+            <div className="relative h-full hidden md:block">
+              <Image src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif" alt="App screenshot" width={450} height={644} className="mx-auto object-contain h-full w-auto" data-ai-hint="app screenshot" />
             </div>
           </div>
         </main>
@@ -140,3 +140,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
