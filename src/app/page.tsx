@@ -13,7 +13,7 @@ const modelProfile = {
   name: 'Alexina Graham',
   bio: "International Model | Victoria's Secret Angel | L'Oréal Paris Ambassador. Spreading positivity one post at a time.",
   agency: 'IMG Models',
-  profilePicture: 'https://picsum.photos/200/200',
+  profilePicture: 'https://cdn.openart.ai/uploads/image_DohdSgBp_1757401223173_raw.jpg',
   coverPhoto: 'https://picsum.photos/1600/600',
   stats: {
     posts: 1240,
