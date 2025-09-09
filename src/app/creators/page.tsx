@@ -6,9 +6,10 @@ import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, ChevronDown, Eye } from 'lucide-react';
+import { Search, ChevronDown, Eye, Menu } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useState, useMemo } from 'react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const creators = [
   {
@@ -386,32 +387,7 @@ export default function CreatorsPage() {
   }, [searchQuery]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-20">
-              <Link href="/" aria-label="Home" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12a10 10 0 0 0-10 10z"></path></svg>
-                </div>
-                <span className="text-xl font-bold text-gray-800">Winkermind</span>
-              </Link>
-              <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
-                <Link href="/creators" className="text-gray-600 hover:text-gray-900 transition-colors">Creadores</Link>
-                <Link href="#" className="text-gray-600 hover:text-gray-900 transition-colors">Videos</Link>
-                <Link href="#" className="text-gray-600 hover:text-gray-900 transition-colors">FAQ</Link>
-                <Link href="#" className="text-gray-600 hover:text-gray-900 transition-colors">Log in</Link>
-                <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6 hover:from-pink-600 hover:to-yellow-500">
-                  Sign up
-                </Button>
-              </nav>
-              <Button className="md:hidden" variant="ghost" size="icon">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
-              </Button>
-          </div>
-        </div>
-        </header>
-
+    <>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
@@ -470,8 +446,6 @@ export default function CreatorsPage() {
           ))}
         </div>
       </main>
-    </div>
+    </>
   );
 }
-
-    

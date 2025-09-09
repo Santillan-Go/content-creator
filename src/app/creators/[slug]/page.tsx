@@ -47,7 +47,7 @@ export default function CreatorProfilePage({ params }: { params: { slug: string 
   const [selectedPost, setSelectedPost] = useState<typeof modelProfile.posts[0] | null>(null);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <main className="max-w-7xl mx-auto">
         <div className="relative">
           <Card className="rounded-none sm:rounded-b-lg overflow-hidden border-x-0 border-t-0 sm:border-x">
