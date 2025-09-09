@@ -65,7 +65,7 @@ export default function Home() {
           </Card>
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
             <Avatar className="h-28 w-28 md:h-36 md:w-36 border-4 border-background shadow-lg">
-              <AvatarImage src={modelProfile.profilePicture} alt={modelProfile.name} data-ai-hint="female model" />
+              <AvatarImage src={modelProfile.profilePicture} alt={modelProfile.name} className="object-cover" data-ai-hint="female model" />
               <AvatarFallback>{modelProfile.name.charAt(0)}</AvatarFallback>
             </Avatar>
           </div>
