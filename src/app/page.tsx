@@ -1,9 +1,13 @@
+"use client";
+
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Eye, ImageIcon, Video } from 'lucide-react';
-import { AiSuggestions } from '@/components/ai-suggestions';
+import { Eye, ImageIcon, Video, Copy } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { useState } from 'react';
 
 const modelProfile = {
   name: 'Alexina Graham',
@@ -18,11 +22,13 @@ const modelProfile = {
   },
   posts: Array.from({ length: 12 }, (_, i) => ({
     id: i,
-    imageUrl: `https://picsum.photos/seed/${i + 1}/600/800`,
+    images: Array.from({ length: 3 + (i % 2) }, (v, j) => `https://picsum.photos/seed/${i * 4 + j + 1}/600/800`),
   })),
 };
 
 export default function Home() {
+  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
+
   return (
     <div className="min-h-screen bg-background">
       <main className="max-w-7xl mx-auto">
@@ -80,21 +86,62 @@ export default function Home() {
         
         <div className="p-4 sm:px-6 lg:px-8">
           <Separator className="my-6" />
-          <h2 className="text-2xl font-bold font-headline mb-6 text-center sm:text-left">Gallery</h2>
           <div className="grid grid-cols-3 gap-1">
-            {modelProfile.posts.map((post) => (
-              <Card key={post.id} className="overflow-hidden group transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl aspect-w-1 aspect-h-1">
-                <div className="aspect-[3/4]">
-                  <Image
-                    src={post.imageUrl}
-                    alt={`Post ${post.id}`}
-                    width={600}
-                    height={800}
-                    className="w-full h-full object-cover"
-                    data-ai-hint="fashion model"
-                  />
-                </div>
-              </Card>
+            {modelProfile.posts.map((post, index) => (
+              <Dialog key={post.id} onOpenChange={(open) => {
+                if (!open) {
+                  setSelectedPostIndex(null);
+                }
+              }}>
+                <DialogTrigger asChild onClick={() => setSelectedPostIndex(index)}>
+                  <Card className="overflow-hidden group relative">
+                     <div className="absolute top-2 right-2 z-10 text-white">
+                      <Copy size={16} />
+                    </div>
+                    <Carousel>
+                      <CarouselContent>
+                        {post.images.map((image, imgIndex) => (
+                          <CarouselItem key={imgIndex}>
+                            <div className="aspect-[3/4]">
+                              <Image
+                                src={image}
+                                alt={`Post ${post.id} image ${imgIndex + 1}`}
+                                width={600}
+                                height={800}
+                                className="w-full h-full object-cover"
+                                data-ai-hint="fashion model"
+                              />
+                            </div>
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                    </Carousel>
+                  </Card>
+                </DialogTrigger>
+                <DialogContent className="p-0 max-w-4xl">
+                  {selectedPostIndex === index && (
+                    <Carousel>
+                      <CarouselContent>
+                        {modelProfile.posts[selectedPostIndex].images.map((image, imgIndex) => (
+                          <CarouselItem key={imgIndex}>
+                             <div className="aspect-[3/4]">
+                               <Image
+                                 src={image}
+                                 alt={`Post ${post.id} image ${imgIndex + 1}`}
+                                 width={600}
+                                 height={800}
+                                 className="w-full h-full object-cover"
+                               />
+                             </div>
+                           </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </Carousel>
+                  )}
+                </DialogContent>
+              </Dialog>
             ))}
           </div>
         </div>
