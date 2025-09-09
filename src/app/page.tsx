@@ -122,9 +122,9 @@ export default function LandingPage() {
                   <div className="flex justify-center md:justify-start mb-4">
                       <div className="flex -space-x-3">
                           {creators.slice(0, 5).map((creator) => (
-                              <div key={creator.name} className="w-10 h-10 rounded-full border-2 border-[#161618] overflow-hidden">
-                                  <Image src={creator.image} alt={creator.name} width={40} height={40} className="object-cover w-full h-full" data-ai-hint={creator.dataAiHint} />
-                              </div>
+                            <div key={creator.name} className="w-12 h-12 rounded-full border-2 border-[#161618] overflow-hidden">
+                                <Image src={creator.image} alt={creator.name} width={48} height={48} className="object-cover w-full h-full" data-ai-hint={creator.dataAiHint} />
+                            </div>
                           ))}
                       </div>
                   </div>
