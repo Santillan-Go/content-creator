@@ -27,7 +27,7 @@ const modelProfile = {
 };
 
 export default function Home() {
-  const [selectedPostIndex, setSelectedPostIndex] = useState<number | null>(null);
+  const [selectedPost, setSelectedPost] = useState<typeof modelProfile.posts[0] | null>(null);
 
   return (
     <div className="min-h-screen bg-background">
@@ -87,13 +87,13 @@ export default function Home() {
         <div className="p-4 sm:px-6 lg:px-8">
           <Separator className="my-6" />
           <div className="grid grid-cols-3 gap-1">
-            {modelProfile.posts.map((post, index) => (
+            {modelProfile.posts.map((post) => (
               <Dialog key={post.id} onOpenChange={(open) => {
                 if (!open) {
-                  setSelectedPostIndex(null);
+                  setSelectedPost(null);
                 }
               }}>
-                <DialogTrigger asChild onClick={() => setSelectedPostIndex(index)}>
+                <DialogTrigger asChild onClick={() => setSelectedPost(post)}>
                   <Card className="overflow-hidden group relative">
                      <div className="absolute top-2 right-2 z-10 text-white">
                       <Copy size={16} />
@@ -118,32 +118,34 @@ export default function Home() {
                     </Carousel>
                   </Card>
                 </DialogTrigger>
-                <DialogContent className="p-0 max-w-4xl">
-                  {selectedPostIndex === index && (
-                    <Carousel>
-                      <CarouselContent>
-                        {modelProfile.posts[selectedPostIndex].images.map((image, imgIndex) => (
-                          <CarouselItem key={imgIndex}>
-                             <div className="aspect-[3/4]">
-                               <Image
-                                 src={image}
-                                 alt={`Post ${post.id} image ${imgIndex + 1}`}
-                                 width={600}
-                                 height={800}
-                                 className="w-full h-full object-cover"
-                               />
-                             </div>
-                           </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                      <CarouselPrevious />
-                      <CarouselNext />
-                    </Carousel>
-                  )}
-                </DialogContent>
               </Dialog>
             ))}
           </div>
+           {selectedPost && (
+            <Dialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
+              <DialogContent className="p-0 max-w-4xl">
+                  <Carousel>
+                    <CarouselContent>
+                      {selectedPost.images.map((image, imgIndex) => (
+                        <CarouselItem key={imgIndex}>
+                           <div className="aspect-[3/4]">
+                             <Image
+                               src={image}
+                               alt={`Post ${selectedPost.id} image ${imgIndex + 1}`}
+                               width={600}
+                               height={800}
+                               className="w-full h-full object-cover"
+                             />
+                           </div>
+                         </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </Carousel>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </main>
 
