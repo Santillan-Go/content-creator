@@ -1,175 +1,131 @@
 "use client";
 
 import Image from 'next/image';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Eye, ImageIcon, Video, Copy } from 'lucide-react';
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { useState } from 'react';
 
-const modelProfile = {
-  name: 'Camila Hot',
-  bio: "International Model | Victoria's Secret Angel | L'Oréal Paris Ambassador. Spreading positivity one post at a time.",
-  agency: 'IMG Models',
-  profilePicture: 'https://cdn.openart.ai/uploads/image_9YFkLViJ_1757401222855_raw.jpg',
-  coverPhoto: 'https://picsum.photos/1600/600',
-  stats: {
-    posts: 1240,
-    videos: 150,
-    views: '1.2B',
+const creators = [
+  {
+    name: 'Aitana Lopez',
+    description: 'AI Creator | 350k+ followers',
+    image: 'https://cdn.openart.ai/uploads/image_Q4Exqj4e_1715024209590_raw.jpg',
+    slug: 'camila-hot',
+    dataAiHint: 'female creator'
   },
-  posts: Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    images: Array.from({ length: 3 + (i % 2) }, (v, j) => `https://picsum.photos/seed/${i * 4 + j + 1}/600/800`),
-  })),
-};
+  {
+    name: 'Darren Till',
+    description: 'UFC Title Contender',
+    image: 'https://cdn.openart.ai/uploads/image_TEh2p37s_1715024237699_raw.jpg',
+    slug: 'camila-hot',
+    dataAiHint: 'male boxer'
+  },
+  {
+    name: 'Lana Scolaro',
+    description: 'DJ | 2.1m followers',
+    image: 'https://cdn.openart.ai/uploads/image_syx23vEk_1715024255018_raw.jpg',
+    slug: 'camila-hot',
+    dataAiHint: 'female dj'
+  },
+  {
+    name: 'Chesca',
+    description: 'Music Artist | 480k followers',
+    image: 'https://cdn.openart.ai/uploads/image_yO49g2Bw_1715024279294_raw.jpg',
+    slug: 'camila-hot',
+    dataAiHint: 'female singer'
+  },
+  {
+    name: 'Ben Morris',
+    description: 'YouTube | 770k subscribers',
+    image: 'https://cdn.openart.ai/uploads/image_92GKqSgE_1715024294432_raw.jpg',
+    slug: 'camila-hot',
+    dataAiHint: 'male youtuber'
+  },
+];
 
-const VerifiedIcon = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.03 15.44l-4.24-4.24 1.41-1.41 2.83 2.83 5.66-5.66 1.41 1.41-7.07 7.07z"
-        fill="#1d9bf0"
-      />
+const DFansLogo = () => (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 0C31.0457 0 40 8.9543 40 20C40 31.0457 31.0457 40 20 40C8.9543 40 0 31.0457 0 20C0 8.9543 8.9543 0 20 0Z" fill="url(#paint0_linear_1_2)"/>
+        <path d="M20.7383 14.1621C22.0135 14.1621 23.078 14.3364 23.9318 14.6851C24.7856 15.0253 25.4357 15.5249 25.8821 16.1836C26.3371 16.8423 26.5646 17.6426 26.5646 18.584C26.5646 19.5253 26.3371 20.3257 25.8821 20.9844C25.4357 21.643 24.7856 22.1426 23.9318 22.4828C23.078 22.823 22.0135 22.9928 20.7383 22.9928H18.8244V28H14.8831V11.2H20.7383C22.0135 11.2 23.078 11.3698 23.9318 11.7099C24.7856 12.0501 25.4357 12.5498 25.8821 13.2085C26.3371 13.8672 26.5646 14.6675 26.5646 15.6089C26.5646 16.3271 26.4389 16.9631 26.1874 17.5168C25.936 18.062 25.5786 18.5084 25.1153 18.8552C25.4299 19.004 25.7275 19.221 26.0082 19.5064C26.2974 19.7833 26.5441 20.1235 26.7481 20.5269C27.182 21.3662 27.4299 22.2876 27.4299 23.291C27.4299 24.3219 27.1691 25.2346 26.6465 26.0293C26.124 26.8239 25.3934 27.4443 24.4549 27.8904C23.5164 28.3364 22.4184 28.5594 21.1611 28.5594H12V8.2H20.7383C22.5643 8.2 24.0859 8.54877 25.3032 9.24632C26.5291 9.94387 27.3989 10.9231 27.9128 12.184C28.4268 13.4364 28.6838 14.8925 28.6838 16.5523C28.6838 17.7058 28.4883 18.7367 28.1057 19.6445C28.5397 19.9572 28.9108 20.3257 29.2191 20.75C29.5359 21.1743 29.7783 21.6544 29.9464 22.19C30.4014 23.4779 30.6288 24.8997 30.6288 26.4555C30.6288 27.8858 30.3479 29.1428 29.7854 30.226C29.2229 31.3092 28.3606 32.1763 27.2068 32.8273C26.053 33.4783 24.6409 33.8038 22.9705 33.8038H14.8831L14.8916 31.0118H21.1611C22.9128 31.0118 24.3207 30.5901 25.3838 29.7466C26.4555 28.8946 26.9918 27.7698 26.9918 26.3721C26.9918 25.3326 26.7026 24.4823 26.124 23.821C25.5539 23.1597 24.7771 22.6934 23.7925 22.422C23.7925 22.3945 23.801 22.3754 23.801 22.3479C24.8584 21.9906 25.6889 21.4172 26.292 20.6277C26.9036 19.8296 27.2094 18.8828 27.2094 17.7871C27.2094 16.3721 26.763 15.2214 25.8701 14.335C24.9859 13.4485 23.7832 12.8721 22.2617 12.6064C22.2532 12.615 22.2447 12.615 22.2277 12.615H18.8244V14.1621H20.7383Z" fill="#F7F7F8"/>
+        <defs>
+            <linearGradient id="paint0_linear_1_2" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FF5C01"/>
+                <stop offset="1" stop-color="#FFD600"/>
+            </linearGradient>
+        </defs>
     </svg>
-  );
+);
 
-export default function Home() {
-  const [selectedPost, setSelectedPost] = useState<typeof modelProfile.posts[0] | null>(null);
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <main className="max-w-7xl mx-auto">
-        <div className="relative">
-          <Card className="rounded-none sm:rounded-b-lg overflow-hidden border-x-0 border-t-0 sm:border-x">
-            <div className="relative w-full h-48 sm:h-64 md:h-80">
-              <Image
-                src={modelProfile.coverPhoto}
-                alt="Cover photo"
-                fill
-                priority
-                className="object-cover"
-                data-ai-hint="fashion runway"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            </div>
-          </Card>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
-            <Avatar className="h-28 w-28 md:h-36 md:w-36 border-4 border-background shadow-lg">
-              <AvatarImage src={modelProfile.profilePicture} alt={modelProfile.name} className="object-cover" data-ai-hint="female model" />
-              <AvatarFallback>{modelProfile.name.charAt(0)}</AvatarFallback>
-            </Avatar>
+    <div className="bg-white text-black">
+      {/* Hero Section */}
+      <div className="bg-[#111111] text-white">
+        <header className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <DFansLogo />
+            <span className="font-bold text-xl">dfans.co</span>
           </div>
-        </div>
+          <nav className="hidden md:flex items-center gap-8 text-sm">
+            <Link href="#" className="hover:text-gray-300">dFans AI</Link>
+            <Link href="#" className="hover:text-gray-300">Video Guide</Link>
+            <Link href="#" className="hover:text-gray-300">FAQ</Link>
+            <Link href="#" className="hover:text-gray-300">Log in</Link>
+            <Button className="bg-gradient-to-r from-yellow-400 to-pink-500 text-white rounded-full px-6">
+              Sign up
+            </Button>
+          </nav>
+          <Button className="md:hidden bg-gradient-to-r from-yellow-400 to-pink-500 text-white rounded-full px-4">
+            Sign up
+          </Button>
+        </header>
 
-        <div className="pt-20 pb-10 px-4 sm:px-6 lg:px-8 text-center">
-            <div className="flex items-center justify-center gap-2">
-            <h1 className="text-3xl md:text-4xl font-bold font-headline">{modelProfile.name}</h1>
-            <VerifiedIcon />
-          </div>
-          <p className="text-muted-foreground mt-1">
-            Agency: <span className="text-foreground">{modelProfile.agency}</span>
-          </p>
-          <p className="mt-4 max-w-2xl mx-auto text-sm md:text-base">{modelProfile.bio}</p>
-        </div>
-
-        <div className="px-4 sm:px-6 lg:px-8">
-          <Card className="p-4">
-            <div className="flex justify-around items-center text-center">
-              <div className="flex flex-col items-center gap-1">
-                <ImageIcon className="h-6 w-6 text-primary" />
-                <p className="font-semibold text-lg">{modelProfile.stats.posts}</p>
-                <p className="text-xs text-muted-foreground">Posts</p>
+        <main className="container mx-auto px-6 pt-16 pb-24 text-center">
+          <div className="flex justify-center mb-4">
+            {creators.slice(0, 5).map((creator, index) => (
+              <div key={creator.name} className="-ml-3">
+                <Image src={creator.image} alt={creator.name} width={48} height={48} className="rounded-full border-2 border-[#111111]" data-ai-hint={creator.dataAiHint} />
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <Video className="h-6 w-6 text-primary" />
-                <p className="font-semibold text-lg">{modelProfile.stats.videos}</p>
-                <p className="text-xs text-muted-foreground">Videos</p>
-              </div>
-              <div className="flex flex-col items-center gap-1">
-                <Eye className="h-6 w-6 text-primary" />
-                <p className="font-semibold text-lg">{modelProfile.stats.views}</p>
-                <p className="text-xs text-muted-foreground">Views</p>
-              </div>
-            </div>
-          </Card>
-        </div>
-        
-        <div className="p-4 sm:px-6 lg:px-8">
-          <Separator className="my-6" />
-          <div className="grid grid-cols-3 gap-1">
-            {modelProfile.posts.map((post) => (
-              <Dialog key={post.id} onOpenChange={(open) => {
-                if (open) {
-                  setSelectedPost(post);
-                } else {
-                  setSelectedPost(null);
-                }
-              }}>
-                <DialogTrigger asChild>
-                  <Card className="overflow-hidden group relative">
-                     <div className="absolute top-2 right-2 z-10 text-white">
-                      <Copy size={16} />
-                    </div>
-                    <Carousel>
-                      <CarouselContent>
-                        {post.images.map((image, imgIndex) => (
-                          <CarouselItem key={imgIndex}>
-                            <div className="aspect-[3/4]">
-                              <Image
-                                src={image}
-                                alt={`Post ${post.id} image ${imgIndex + 1}`}
-                                width={600}
-                                height={800}
-                                className="w-full h-full object-cover"
-                                data-ai-hint="fashion model"
-                              />
-                            </div>
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-                    </Carousel>
-                  </Card>
-                </DialogTrigger>
-              </Dialog>
             ))}
           </div>
-           {selectedPost && (
-            <Dialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
-              <DialogContent className="p-0 max-w-4xl">
-                  <Carousel>
-                    <CarouselContent>
-                      {selectedPost.images.map((image, imgIndex) => (
-                        <CarouselItem key={imgIndex}>
-                           <div className="aspect-[3/4]">
-                             <Image
-                               src={image}
-                               alt={`Post ${selectedPost.id} image ${imgIndex + 1}`}
-                               width={600}
-                               height={800}
-                               className="w-full h-full object-cover"
-                             />
-                           </div>
-                         </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                  </Carousel>
-              </DialogContent>
-            </Dialog>
-          )}
+          <p className="text-sm text-gray-400 mb-6">Loved by 100,000+ Creators</p>
+          <h1 className="text-5xl md:text-7xl font-bold mb-4">The Decentralized<br />Creator's Platform</h1>
+          <p className="text-gray-400 mb-8 max-w-md mx-auto">Less Censorship. More Privacy. Faster Payouts. Future-Ready.</p>
+          <div className="flex justify-center items-center gap-4">
+            <Button className="bg-gradient-to-r from-yellow-400 to-pink-500 text-white rounded-full px-8 py-6 text-lg">Become a creator</Button>
+            <Link href="#" className="text-white font-semibold text-lg">Sign up as a Fan</Link>
+          </div>
+          <p className="text-xs text-gray-500 mt-2">It's free and takes less than a minute!</p>
+        </main>
+      </div>
+
+      {/* Top Creators Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center mb-10">TOP CREATORS</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {creators.map((creator) => (
+              <Link href={`/creators/${creator.slug}`} key={creator.name}>
+                <Card className="overflow-hidden cursor-pointer group">
+                  <div className="relative aspect-[3/4]">
+                    <Image
+                      src={creator.image}
+                      alt={creator.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      data-ai-hint={creator.dataAiHint}
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg">{creator.name}</h3>
+                    <p className="text-sm text-gray-500">{creator.description}</p>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
 
       <footer className="text-center p-8 text-muted-foreground text-sm mt-10">
         <p>&copy; {new Date().getFullYear()} ModelVerse. All Rights Reserved.</p>

@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'ModelVerse',
-  description: 'Your universe for model portfolio management and AI-powered style suggestions.',
+  title: 'dFans',
+  description: 'The Decentralized Creator\'s Platform',
 };
 
 export default function RootLayout({
