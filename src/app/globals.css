@@ -83,3 +83,8 @@
   }
 }
 
+*,
+*::before,
+*::after {
+  border: none;
+}
