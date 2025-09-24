@@ -88,7 +88,7 @@ export default function CreatorsPage() {
                   <p className="text-sm text-gray-500 mt-2">
                     {creator.followers} followers
                   </p>
-                  <Button className="mt-4 w-full bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full hover:from-pink-600 hover:to-yellow-500 shadow-md hover:shadow-lg transition-shadow">
+                  <Button className="mt-4 w-full bg-gradient-to-r from-[#ff699f] to-[#fcc841] text-white rounded-full hover:from-pink-600 hover:to-yellow-500 shadow-md hover:shadow-lg transition-shadow">
                     <Eye className="mr-2 h-4 w-4" /> Ver contenido
                   </Button>
                 </div>

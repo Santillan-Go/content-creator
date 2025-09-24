@@ -107,7 +107,7 @@ export default function Carousel({
         {/* Close button */}
         <button
           onClick={closeModal}
-          className="absolute top-4 left-6 sm:right-6 sm:left-auto text-white text-2xl font-bold z-50"
+          className="absolute top-4 left-6 sm:right-6 text-white text-2xl font-bold z-50"
         >
           {isMobile ? (
             <ArrowLeft className="h-6 w-6" />
@@ -207,7 +207,6 @@ export default function Carousel({
                           caption={post.caption}
                           username={username}
                           showProfile={false}
-                          className={"bg-white"}
                         />
                       </div>
                     );
@@ -239,7 +238,7 @@ export default function Carousel({
                               slidesPerView={1}
                               pagination={{ clickable: true }}
                               loop={true}
-                              className="!w-[50%] mx-auto flex-1 "
+                              className="!w-[50%] mx-auto flex-1 bg-pink-500"
                             >
                               {getCurrentPost(index).media.map(
                                 (item, mediaIndex) => (
@@ -303,22 +302,20 @@ export const MediaContent = ({
 }) => {
   if (item.type === "video") {
     return (
-      <VideoPlayer
-        src={item.url}
-        currentSlideIndex={currentSlideIndex}
-        thumbnail={item.thumbnail || ""}
-        index={index}
-        isCarousel={true}
-      />
+      <video src={item.url} className=" object-contain" />
+
+      // <VideoPlayer
+      //   src={item.url}
+      //   currentSlideIndex={currentSlideIndex}
+      //   thumbnail={item.thumbnail || ""}
+      //   index={index}
+      //   isCarousel={true}
+      // />
     );
   }
 
   return (
-    <img
-      src={item.url}
-      alt="Media content"
-      className=" object-contain h-full "
-    />
+    <img src={item.url} alt="Media content" className=" object-contain " />
   );
 };
 

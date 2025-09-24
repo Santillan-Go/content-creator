@@ -42,7 +42,7 @@ export default function CreateUser() {
   return (
     <>
       <div className="min-h-screen bg-background p-8 bg-gradient-to-b from-background to-secondary/10">
-        <Card className="max-w-2xl mx-auto border border-border/40 shadow-lg backdrop-blur-sm">
+        <Card className="max-w-2xl mx-auto border border-border/40 shadow-lg backdrop-blur-sm rounded-xl">
           <CardHeader className="space-y-1 border-b border-border/40 bg-secondary/5">
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               Create New User
@@ -166,7 +166,7 @@ export default function CreateUser() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+                className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity rounded-2xl"
               >
                 Create User
               </Button>

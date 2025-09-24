@@ -12,7 +12,10 @@ import {
 } from "@/components/ui/accordion";
 import { ShieldOff, Lock, Zap, Rocket } from "lucide-react";
 import { creators } from "./creators/page";
-
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import Header from "@/components/ui/Header";
+// ...existing imports...
 // const creators = [
 //   {
 //     name: "Aitana Lopez",
@@ -76,112 +79,47 @@ const faqItems = [
 
 const features = [
   {
-    icon: <ShieldOff className="w-10 h-10 text-pink-500" />,
+    icon: <ShieldOff className="w-10 h-10 text-[#ff699f]" />,
     title: "Less Censorship",
     description:
       "Our decentralized platform means more freedom of expression for creators.",
+    borderColor: "#ff699f",
   },
   {
-    icon: <Lock className="w-10 h-10 text-yellow-400" />,
+    icon: <Lock className="w-10 h-10 text-[#fcc841]" />,
     title: "More Privacy",
     description:
       "Protect your data and content with the power of decentralization.",
+    borderColor: "#fcc841",
   },
   {
-    icon: <Zap className="w-10 h-10 text-pink-500" />,
+    icon: <Zap className="w-10 h-10 text-[#ff699f]" />,
     title: "Faster Payouts",
     description:
       "Get your earnings quickly and efficiently, without long waiting periods.",
+    borderColor: "#ff699f",
   },
   {
-    icon: <Rocket className="w-10 h-10 text-yellow-400" />,
+    icon: <Rocket className="w-10 h-10 text-[#fcc841]" />,
     title: "Future-Ready",
     description:
       "Built on modern technology, dFans is ready for the future of the creator economy.",
+    borderColor: "#fcc841",
   },
 ];
 
 export default function LandingPage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
-    <div className="bg-[#161618] text-white">
-      {/* Hero Section */}
+    <div className="bg-[#161618]  text-white w-full">
       <div>
-        <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <Link
-              href="/"
-              aria-label="Home"
-              className="flex items-center gap-2"
-            >
-              <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
-                  <path d="M12 12a10 10 0 0 0-10 10z"></path>
-                </svg>
-              </div>
-              <span className="text-xl font-bold">Winkermind</span>
-            </Link>
-            <nav className="hidden md:flex items-center gap-4 text-sm">
-              <Link
-                href="/creators"
-                className="text-white hover:text-gray-300 transition-colors"
-              >
-                Creadores
-              </Link>
-              <Link
-                href="#"
-                className="text-white hover:text-gray-300 transition-colors"
-              >
-                Videos
-              </Link>
-              <Link
-                href="#"
-                className="text-white hover:text-gray-300 transition-colors"
-              >
-                FAQ
-              </Link>
-              {/* <Link
-                href="#"
-                className="text-white hover:text-gray-300 transition-colors"
-              >
-                Log in
-              </Link> */}
-              {/* <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6 hover:from-pink-600 hover:to-yellow-500">
-                  Sign up
-                </Button> */}
-            </nav>
-            <Button className="md:hidden" variant="ghost" size="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-6 w-6"
-              >
-                <line x1="4" x2="20" y1="12" y2="12"></line>
-                <line x1="4" x2="20" y1="6" y2="6"></line>
-                <line x1="4" x2="20" y1="18" y2="18"></line>
-              </svg>
-            </Button>
-          </div>
-        </header>
-
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Header
+          checkIfAdmin={false}
+          isHomePage={true}
+          className="bg-[#161618] "
+          colorText="text-white"
+        />
+        <main className="w-full sm:max-w-7xl sm:mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
             <div className="text-center md:text-left">
               <div className="flex justify-center md:justify-start mb-4">
@@ -214,21 +152,17 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
                 <Link href="/creators">
-                  <Button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full px-8 py-6 text-lg hover:from-yellow-500 hover:to-orange-600">
+                  <Button className="bg-gradient-to-r from-[#ff699f] to-[#fcc841] text-black font-medium rounded-full px-8 py-6 text-lg hover:from-[#e5658b] hover:to-[#e3b638] transition-all duration-300">
                     Explorar Creadores
                   </Button>
                 </Link>
-                {/* <Button variant="link" className="text-white font-semibold text-lg bg-gradient-to-r from-pink-500 to-purple-600 rounded-full py-3 px-5 transition-colors">Registrate</Button> */}
               </div>
-              {/* <p className="text-xs text-gray-500 mt-4">
-                *Registrate sin costo para poder ver más contenido exclusivo*
-              </p> */}
             </div>
             <div className="relative mt-12 md:mt-0">
               <Image
-                src="https://dfans.co/assets/top-dark.1.0.113.DwGjhX2l.avif"
+                src="/assets/top-dark.webp"
                 alt="App screenshot"
-                width={600}
+                width={1000}
                 height={550}
                 className="mx-auto object-contain"
                 data-ai-hint="app screenshot"
@@ -240,27 +174,41 @@ export default function LandingPage() {
 
       <div className="bg-white text-black">
         {/* Top Creators Section */}
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-center mb-12">
+        <section className="py-8 sm:py-16 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold text-left mb-6 sm:mb-8">
               TOP CREATORS
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {creators.map((creator) => (
-                <Link href={`/creators/${creator.username}`} key={creator.name}>
-                  <Card className="overflow-hidden cursor-pointer group border-none shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+              {creators.slice(0, 5).map((creator) => (
+                <Link
+                  href={`/creators/${creator.username}`}
+                  key={creator.name}
+                  className="w-full"
+                >
+                  <Card
+                    className="overflow-hidden cursor-pointer group border-none 
+            shadow-md transition-all duration-300 hover:shadow-xl 
+            hover:-translate-y-1 rounded-2xl sm:rounded-2xl h-full"
+                  >
                     <div className="relative aspect-[3/4]">
                       <Image
                         src={creator.coverImage}
                         alt={creator.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        data-ai-hint={creator.dataAiHint}
+                        sizes="(max-width: 640px) 50vw, 
+                       (max-width: 768px) 33vw,
+                       (max-width: 1024px) 25vw,
+                       20vw"
                       />
                     </div>
-                    <div className="p-4 bg-white">
-                      <h3 className="font-bold text-lg">{creator.name}</h3>
-                      <p className="text-sm text-gray-500">
+                    <div className="p-2 sm:p-3 bg-white">
+                      <h3 className="font-semibold text-sm sm:text-base truncate">
+                        {creator.name}
+                      </h3>
+                      <p className="text-xs text-gray-500 truncate">
                         {creator.description}
                       </p>
                     </div>
@@ -270,35 +218,70 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
         {/* Features Section */}
-        <section className="bg-gray-50 py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-4xl font-bold mb-4">
+        <section className="bg-gray-50 py-12 sm:py-20">
+          <div className="max-w-7xl px-4 w-full mx-auto sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
                 Why dFans is Different
               </h2>
-              <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                 We're building a fairer, more open platform for creators and
                 their fans.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            <div className="space-y-8 sm:space-y-20 px-4 sm:px-32">
               {features.map((feature, index) => (
-                <Card
+                <div
                   key={index}
-                  className="bg-white p-8 text-center shadow-lg hover:shadow-xl transition-shadow"
+                  className={`flex flex-col ${
+                    index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                  } items-center gap-6 lg:gap-16`}
                 >
-                  <div className="flex justify-center mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </Card>
+                  <div className="w-full lg:w-1/2">
+                    <Card
+                      className="bg-gradient-to-br from-white to-gray-50 
+                p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-300 
+                transform hover:-translate-y-1 rounded-2xl sm:rounded-[2rem]
+                border-2 hover:border-4 
+                border-[${feature.borderColor}]/30
+                hover:border-[${feature.borderColor}]/50"
+                    >
+                      <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
+                        <div className="flex-shrink-0">
+                          <div
+                            className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl 
+                      bg-gradient-to-r from-[${feature.borderColor}]/10 to-[${feature.borderColor}]/5
+                      flex items-center justify-center
+                      border-2 border-[${feature.borderColor}]/20
+                      shadow-lg shadow-[${feature.borderColor}]/10"
+                          >
+                            {feature.icon}
+                          </div>
+                        </div>
+                        <div className="flex-grow">
+                          <h3
+                            className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 
+                    bg-gradient-to-r from-pink-500 to-yellow-400 
+                    bg-clip-text text-transparent"
+                          >
+                            {feature.title}
+                          </h3>
+                          <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                            {feature.description}
+                          </p>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </section>
-
         {/* CTA Section */}
+
         <section className="relative py-20 bg-gray-800">
           <div className="absolute inset-0 overflow-hidden">
             <Image
@@ -326,7 +309,6 @@ export default function LandingPage() {
             </Button>
           </div>
         </section>
-
         {/* FAQ Section */}
         <section className="py-20">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -347,11 +329,84 @@ export default function LandingPage() {
             </Accordion>
           </div>
         </section>
-
         <footer className="text-center p-8 text-gray-400 text-sm mt-10 bg-[#161618]">
           <p>&copy; {new Date().getFullYear()} dFans. All Rights Reserved.</p>
         </footer>
       </div>
     </div>
   );
+}
+{
+  /* 
+        <header className="w-full mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+           
+
+          
+            <nav className="hidden md:flex items-center gap-4 text-sm">
+              <Link
+                href="/creators"
+                className="text-white hover:text-gray-300 transition-colors"
+              >
+                Creadores
+              </Link>
+              <Link
+                href="#"
+                className="text-white hover:text-gray-300 transition-colors"
+              >
+                Videos
+              </Link>
+              <Link
+                href="#"
+                className="text-white hover:text-gray-300 transition-colors"
+              >
+                FAQ
+              </Link>
+            </nav>
+
+           
+            <Button
+              className="md:hidden"
+             
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
+
+       
+          {isMobileMenuOpen && (
+            <div className="md:hidden absolute top-20 left-0 right-0 bg-black/95 backdrop-blur-sm border-b border-white/10">
+              <nav className="flex flex-col p-4 gap-4">
+                <Link
+                  href="/creators"
+                  className="text-white hover:text-gray-300 transition-colors py-2 px-4 rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Creadores
+                </Link>
+                <Link
+                  href="#"
+                  className="text-white hover:text-gray-300 transition-colors py-2 px-4 rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Videos
+                </Link>
+                <Link
+                  href="#"
+                  className="text-white hover:text-gray-300 transition-colors py-2 px-4 rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  FAQ
+                </Link>
+              </nav>
+            </div>
+          )}
+        </header>
+        */
 }

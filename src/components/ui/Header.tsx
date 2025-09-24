@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Menu, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import CreatePost from "@/pages/Create_Post_Page";
@@ -11,16 +17,23 @@ export default function Header({
   userImage,
   username,
   checkIfAdmin,
+  isHomePage = false,
+  className,
+  colorText = "text-gray-900",
 }: {
   userImage?: string;
   username?: string;
   checkIfAdmin: boolean;
+  isHomePage?: boolean;
+  className?: string;
+  colorText?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCreatePost = () => setIsOpen(!isOpen);
+  //sticky top-0
   return (
-    <header className="bg-white border-b sticky top-0 z-30">
+    <header className={`border-b  z-30 ${className} ${colorText}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link href="/" aria-label="Home" className="flex items-center gap-2">
@@ -40,25 +53,19 @@ export default function Header({
                 <path d="M12 12a10 10 0 0 0-10 10z"></path>
               </svg>
             </div>
-            <span className="text-xl font-bold text-gray-800">Winkermind</span>
+            <span className="text-xl font-bold ">Winkermind</span>
           </Link>
           <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
             <Link
               href="/creators"
-              className="text-gray-600 hover:text-gray-900 transition-colors"
+              className=" hover:text-gray-400 transition-colors"
             >
               Creadores
             </Link>
-            <Link
-              href="#"
-              className="text-gray-600 hover:text-gray-900 transition-colors"
-            >
+            <Link href="#" className=" hover:text-gray-400 transition-colors">
               Videos
             </Link>
-            <Link
-              href="#"
-              className="text-gray-600 hover:text-gray-900 transition-colors"
-            >
+            <Link href="#" className=" hover:text-gray-400 transition-colors">
               FAQ
             </Link>
             {/* <Link href="#" className="text-gray-600 hover:text-gray-900 transition-colors">Log in</Link>
@@ -74,18 +81,25 @@ export default function Header({
               Create Post
             </Button> */}
             {/*SHOW THE <CreatePost />*/}
-            {checkIfAdmin && (
+            {checkIfAdmin && !isHomePage && (
               <CreatePost userImage={userImage} username={username} />
             )}
           </nav>
 
           <Sheet>
             <SheetTrigger asChild>
-              <Button className="md:hidden" variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
+              <Button className="md:hidden" size="icon">
+                <Menu
+                  className={`h-6 w-6  ${
+                    isHomePage ? "text-white" : "text-gray-600"
+                  }`}
+                />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent side="right" title="Menu">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
               <div className="flex flex-col gap-4 p-4">
                 <Link
                   href="/creators"
@@ -105,7 +119,10 @@ export default function Header({
                 >
                   FAQ
                 </Link>
-                <Link
+                {checkIfAdmin && !isHomePage && (
+                  <CreatePost userImage={userImage} username={username} />
+                )}
+                {/* <Link
                   href="#"
                   className="text-gray-600 hover:text-gray-900 transition-colors"
                 >
@@ -113,7 +130,7 @@ export default function Header({
                 </Link>
                 <Button className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white rounded-full px-6 hover:from-pink-600 hover:to-yellow-500">
                   Sign up
-                </Button>
+                </Button> */}
               </div>
             </SheetContent>
           </Sheet>

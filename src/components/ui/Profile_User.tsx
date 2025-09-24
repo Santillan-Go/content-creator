@@ -4,24 +4,33 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Eye, ImageIcon, Video, Copy } from "lucide-react";
+import { Eye, ImageIcon, Video, Copy, Verified } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel_2";
+
 import C from "@/components/ui/Carousel";
 import { useEffect, useState } from "react";
 
 import { User } from "@/types/user_type";
 import { creators } from "@/app/creators/page";
+import { Post, Media, MediaType } from "@/types/post_type";
 
 import Header from "./Header";
 import { useSession } from "next-auth/react";
 
 // TODO- MAKE THE LOGIC FOR CAROUSEL - ONE IMAGE & VIDEO
-const modelProfile = {
+const modelProfile: {
+  name: string;
+  bio: string;
+  agency: string;
+  profilePicture: string;
+  coverPhoto: string;
+  stats: {
+    posts: number;
+    videos: number;
+    views: string;
+  };
+  posts: Post[];
+} = {
   name: "Camila Hot",
   bio: "International Model | Victoria's Secret Angel | L'Oréal Paris Ambassador. Spreading positivity one post at a time.",
   agency: "IMG Models",
@@ -35,34 +44,44 @@ const modelProfile = {
   },
   posts: Array.from({ length: 12 }, (_, i) => ({
     id: i,
-    images: Array.from(
-      { length: 3 + (i % 2) },
-      (v, j) => `https://picsum.photos/seed/${i * 4 + j + 1}/1080/1080`
-    ),
+    media: Array.from({ length: 3 + (i % 2) }, (__, j) => {
+      const isVideo = (i + j) % 4 === 0; // or any rule you want
+
+      const media: Media = isVideo
+        ? {
+            url: `https://assets.mixkit.co/videos/34562/34562-720.mp4`,
+            type: "video",
+            width: 1080,
+            height: 1080,
+            thumbnail: `https://picsum.photos/seed/${i * 4 + j + 1}/1080/1080`, // Placeholder thumbnail
+          }
+        : {
+            url: `https://picsum.photos/seed/${i * 4 + j + 1}/1080/1080`,
+            type: "image",
+            width: 1080,
+            height: 1080,
+          };
+
+      return media;
+    }),
+    caption: "Fashion shoot in Paris ✨",
+    createdAt: new Date(2024, 0, i + 1).toISOString(),
+    likes: Math.floor(Math.random() * 10000),
+    comments: Math.floor(Math.random() * 1000),
+    isCarousel: 3 + (i % 2) > 1,
+    userId: 1,
+    tags: ["fashion", "paris", "modeling"],
   })),
 };
 
-const VerifiedIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.03 15.44l-4.24-4.24 1.41-1.41 2.83 2.83 5.66-5.66 1.41 1.41-7.07 7.07z"
-      fill="#1d9bf0"
-    />
-  </svg>
-);
-
 export default function CreatorProfile({ username }: { username: string }) {
-  const [selectedPost, setSelectedPost] = useState<
-    (typeof modelProfile.posts)[0] | null
-  >(null);
+  const [carouselState, setCarouselState] = useState<{
+    isOpen: boolean;
+    startIndex: number;
+  }>({
+    isOpen: false,
+    startIndex: 0,
+  });
   const session = useSession();
   const checkIfAdmin = session.data?.user?.name === "admin";
 
@@ -79,15 +98,25 @@ export default function CreatorProfile({ username }: { username: string }) {
     description: "No description available",
   });
 
-  const closeModal = () => setSelectedPost(null);
+  const closeModal = () =>
+    setCarouselState({ ...carouselState, isOpen: false });
 
   useEffect(() => {
+    console.log(modelProfile, "this is the model profile");
     const found = creators.find((creator) => creator.username === username);
     if (found) {
       setUserInfo(found);
     }
   }, [username]);
 
+  const allPostImages = modelProfile.posts
+    .map((post) => ({
+      images: post.media.map((media) => media.url),
+      id: post.id,
+    }))
+    .flat();
+
+  // we need to get the post selected to show in the carrusel, and from there show
   return (
     <>
       <Header
@@ -129,7 +158,7 @@ export default function CreatorProfile({ username }: { username: string }) {
               <h1 className="text-3xl md:text-4xl font-bold font-headline">
                 {userInfo?.name || modelProfile.name}
               </h1>
-              <VerifiedIcon />
+              <Verified className="text-[#0095F6]" />
             </div>
             <p className="text-muted-foreground mt-1">
               Agency:{" "}
@@ -144,21 +173,21 @@ export default function CreatorProfile({ username }: { username: string }) {
             <Card className="p-4">
               <div className="flex justify-around items-center text-center">
                 <div className="flex flex-col items-center gap-1">
-                  <ImageIcon className="h-6 w-6 text-primary" />
+                  <ImageIcon className="h-6 w-6 text-secondary" />
                   <p className="font-semibold text-lg">
                     {modelProfile.stats.posts}
                   </p>
                   <p className="text-xs text-muted-foreground">Posts</p>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <Video className="h-6 w-6 text-primary" />
+                  <Video className="h-6 w-6 text-secondary" />
                   <p className="font-semibold text-lg">
                     {modelProfile.stats.videos}
                   </p>
                   <p className="text-xs text-muted-foreground">Videos</p>
                 </div>
                 <div className="flex flex-col items-center gap-1">
-                  <Eye className="h-6 w-6 text-primary" />
+                  <Eye className="h-6 w-6 text-secondary" />
                   <p className="font-semibold text-lg">
                     {modelProfile.stats.views}
                   </p>
@@ -172,57 +201,49 @@ export default function CreatorProfile({ username }: { username: string }) {
             <Separator className="my-6" />
 
             <div className="grid grid-cols-3 gap-1">
-              {modelProfile.posts.map((post) => (
-                <Dialog
-                  key={post.id}
-                  // onOpenChange={(open) => {
-                  //   if (open) {
-                  //     setSelectedPost(post);
-                  //   } else {
-                  //     setSelectedPost(null);
-                  //   }
-                  // }}
-                >
+              {modelProfile.posts.map((post, postIndex) => (
+                <Dialog key={post.id}>
                   <DialogTrigger asChild>
                     <Card
                       className="overflow-hidden group relative cursor-pointer"
                       onClick={() => {
-                        if (!selectedPost) {
-                          setSelectedPost(post);
-                        }
+                        setCarouselState({
+                          isOpen: true,
+                          startIndex: postIndex,
+                        });
                       }}
                     >
                       <div className="absolute top-2 right-2 z-10 text-white">
                         <Copy size={16} />
                       </div>
-                      <Carousel>
-                        <CarouselContent>
-                          {post.images.map((image, imgIndex) => (
-                            <CarouselItem key={imgIndex}>
-                              <div className="aspect-[3/4]">
-                                <Image
-                                  src={image}
-                                  alt={`Post ${post.id} image ${imgIndex + 1}`}
-                                  width={600}
-                                  height={800}
-                                  className="w-full h-full object-cover"
-                                  data-ai-hint="fashion model"
-                                />
-                              </div>
-                            </CarouselItem>
-                          ))}
-                        </CarouselContent>
-                      </Carousel>
+                      <div className="aspect-[3/4]">
+                        <Image
+                          src={post.media[0].thumbnail ?? post.media[0].url} // Show first image as thumbnail
+                          alt={`Post ${post.id}`}
+                          width={600}
+                          height={800}
+                          className="w-full h-full object-cover"
+                          data-ai-hint="fashion model"
+                        />
+                      </div>
                     </Card>
                   </DialogTrigger>
                 </Dialog>
               ))}
             </div>
-            {selectedPost && (
+            {carouselState.isOpen && (
               <C
-                images={selectedPost.images}
+                media={modelProfile.posts.map((post) => ({
+                  url: post.media[0].url,
+                  type: post.media[0].type,
+                  thumbnail: post.media[0].thumbnail ?? post.media[0].url,
+                  width: post.media[0].width,
+                  height: post.media[0].height,
+                }))}
+                allPosts={modelProfile.posts}
+                username={username}
+                initialSlide={carouselState.startIndex}
                 closeModal={closeModal}
-                username={userInfo?.name ?? "Username"}
               />
             )}
           </div>

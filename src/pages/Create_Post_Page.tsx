@@ -1,13 +1,57 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useState, useRef, useEffect } from "react";
+import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ImagePlus, X, UserCircle2, MapPin } from "lucide-react";
+import ReactPlayer from "react-player";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { Swiper as SwiperType } from "swiper";
+import { SwiperSlide, Swiper } from "swiper/react";
+import "@/styles/video-player.css";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css"; // basic styles
+import "swiper/css/navigation"; // optional: navigation styles
+import "swiper/css/pagination"; // optional: pagination styles
+import { CreatePostRightSide } from "@/components/ui/Create_Post_Right_Side";
+import { Dialog } from "@/components/ui/dialog";
+import { VideoPlayer } from "@/components/ui/Video_Player";
+
+interface MediaPreview {
+  src: string;
+  type: string;
+  thumbnail: string;
+}
+
+// Add this helper function at the top of your file, outside the component
+const getImageDimensions = (
+  file: File
+): Promise<{ width: number; height: number; name: string }> => {
+  return new Promise((resolve, reject) => {
+    // Create HTMLImageElement instead of using Next.js Image
+    const img = document.createElement("img");
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve({
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+        name: file.name,
+      });
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Failed to load image"));
+    };
+
+    img.src = objectUrl;
+  });
+};
 
 export default function CreatePost({
   userImage,
@@ -16,142 +60,252 @@ export default function CreatePost({
   userImage?: string;
   username?: string;
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [description, setDescription] = useState("");
-  const [preview, setPreview] = useState<string[]>([]);
+  const [previews, setPreviews] = useState<MediaPreview[]>([]);
+  const [error, setError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Update handleFileSelect to include validation
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    setSelectedFiles(files);
+    setError(""); // Reset error state
 
-    // Create preview URLs
-    const newPreviews = files.map((file) => URL.createObjectURL(file));
-    setPreview(newPreviews);
+    try {
+      // Validate each image
+      for (const file of files) {
+        if (file.type.startsWith("image/")) {
+          const dimensions = await getImageDimensions(file);
+
+          if (dimensions.width < 1000 || dimensions.height < 1000) {
+            setError(`${dimensions.name} must be at least 1000x1000 pixels`);
+            setSelectedFiles([]);
+            setPreviews([]);
+            if (fileInputRef.current) {
+              fileInputRef.current.value = "";
+            }
+            return;
+          }
+        }
+      }
+
+      setSelectedFiles(files);
+
+      // Create preview URLs with type detection
+      const newPreviews = files.map((file) => {
+        const isVideo = file.type.startsWith("video/");
+        return {
+          src: URL.createObjectURL(file),
+          type: isVideo ? "video" : "image",
+          thumbnail: isVideo
+            ? URL.createObjectURL(file)
+            : URL.createObjectURL(file),
+        };
+      });
+      setPreviews(newPreviews);
+    } catch (err) {
+      setError("Error processing images. Please try again.");
+      setSelectedFiles([]);
+      setPreviews([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
+
+  // Clean up URLs on unmount
+  useEffect(() => {
+    return () => {
+      previews.forEach((preview) => URL.revokeObjectURL(preview.src));
+    };
+  }, [previews]);
 
   const handlePublish = () => {
     console.log("Publishing:", { files: selectedFiles, description });
     // Add your publish logic here
   };
 
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-primary/25">
-          <ImagePlus className="w-4 h-4 mr-2" />
-          Create Post
-        </Button>
-      </DialogTrigger>
+  const handleSlideChange = (swiper: SwiperType) => {
+    setCurrentSlideIndex(swiper.realIndex);
+  };
 
-      <DialogContent className="sm:max-w-[800px] p-0 gap-0 rounded-3xl overflow-hidden shadow-2xl ">
-        <div className="flex h-[600px]">
+  return (
+    <>
+      <Button
+        className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-primary/25 rounded-2xl"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <ImagePlus className="w-4 h-4 mr-2" />
+        Create Post
+      </Button>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedFiles([]);
+          setPreviews([]);
+          setDescription("");
+          setError("");
+        }}
+      >
+        <div className="flex flex-col sm:flex-row h-[80vh]">
           {/* Left side - Image upload/preview */}
-          <div className="flex-1 bg-black/95 flex items-center justify-center">
-            {!preview.length ? (
-              <div className="text-center p-8">
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                  ref={fileInputRef}
-                  onChange={handleFileSelect}
-                />
-                <div
-                  className="p-8 rounded-xl border-2 border-dashed border-white/20 hover:border-primary/50 transition-colors cursor-pointer bg-white/5"
-                  onClick={() => fileInputRef.current?.click()}
+
+          {!previews.length ? (
+            <>
+              <input
+                type="file"
+                accept="image/*,video/*"
+                multiple
+                className="hidden"
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+              />
+              <DropZone
+                onClick={() => fileInputRef.current?.click()}
+                error={error}
+              />
+            </>
+          ) : (
+            // <div className="flex-1 flex items-center justify-center p-8">
+            //   <input
+            //     type="file"
+            //     accept="image/*,video/*"
+            //     multiple
+            //     className="hidden"
+            //     ref={fileInputRef}
+            //     onChange={handleFileSelect}
+            //   />
+            //   {error && (
+            //     <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500">
+            //       {error}
+            //     </div>
+            //   )}
+            //   <div
+            //     className="p-8 rounded-xl border-2 border-dashed border-white/20 hover:border-primary/50 transition-colors cursor-pointer bg-white/5"
+            //     onClick={() => fileInputRef.current?.click()}
+            //   >
+            //     <Button
+            //       variant="ghost"
+            //       className="flex flex-col items-center gap-4 text-white h-auto py-6  hover:bg-gradient-to-r from-primary/50 to-secondary/50 transition-all duration-300"
+            //     >
+            //       <ImagePlus className="w-12 h-12 opacity-80" />
+            //       <div className="space-y-2 ">
+            //         <h3 className="font-semibold text-lg">
+            //           Drop your images here
+            //         </h3>
+            //         <p className="text-sm text-white/60">or click to upload</p>
+            //       </div>
+            //     </Button>
+            //   </div>
+            // </div>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={0}
+              slidesPerView={1}
+              pagination={{ clickable: true }}
+              loop={previews.length > 1}
+              className=" !w-[50%] !h-full bg-black/95"
+              onSlideChange={handleSlideChange}
+            >
+              {previews.map((preview, index) => (
+                <SwiperSlide
+                  key={index}
+                  className="!flex !items-center !justify-center"
                 >
-                  <Button
-                    variant="ghost"
-                    className="flex flex-col items-center gap-4 text-white h-auto py-6  hover:bg-gradient-to-r from-primary/50 to-secondary/50 transition-all duration-300"
-                  >
-                    <ImagePlus className="w-12 h-12 opacity-80" />
-                    <div className="space-y-2 ">
-                      <h3 className="font-semibold text-lg">
-                        Drop your images here
-                      </h3>
-                      <p className="text-sm text-white/60">
-                        or click to upload
-                      </p>
-                    </div>
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="relative w-full h-full group">
-                <Image
-                  src={preview[0]}
-                  alt="Preview"
-                  fill
-                  className="object-contain"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-4 right-4 text-white hover:bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => {
-                    setSelectedFiles([]);
-                    setPreview([]);
-                  }}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
-          </div>
+                  <MediaContent
+                    src={preview.src}
+                    type={preview.type}
+                    thumbnail={preview.thumbnail}
+                    index={index}
+                    currentSlideIndex={currentSlideIndex}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
 
           {/* Right side - Description and publish */}
-          <div className="w-[400px] flex flex-col border-l border-border/30 bg-background/95 backdrop-blur-sm">
-            <div className="p-6 border-b border-border/30">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={userImage} />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <span className="font-medium">{username}</span>
-              </div>
-            </div>
-
-            <div className="flex-1 p-6">
-              <Textarea
-                placeholder="Write a caption..."
-                className="min-h-[200px] resize-none border-none focus-visible:ring-0 text-lg placeholder:text-muted-foreground/50 bg-transparent"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-
-              {/* <div className="space-y-4 mt-6">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-muted-foreground"
-                >
-                  <UserCircle2 className="w-4 h-4 mr-2" />
-                  Tag people
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-muted-foreground"
-                >
-                  <MapPin className="w-4 h-4 mr-2" />
-                  Add location
-                </Button>
-              </div> */}
-            </div>
-
-            <div className="p-6 border-t border-border/30 bg-muted/30">
-              <Button
-                className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-primary/25"
-                disabled={!selectedFiles.length}
-                onClick={handlePublish}
-              >
-                Share
-              </Button>
-            </div>
-          </div>
+          <CreatePostRightSide
+            userImage={userImage}
+            username={username}
+            description={description}
+            setDescription={setDescription}
+            selectedFiles={selectedFiles}
+            handlePublish={handlePublish}
+          />
         </div>
-      </DialogContent>
-    </Dialog>
+      </Modal>
+    </>
   );
 }
+
+const MediaContent = ({
+  src,
+  type,
+  thumbnail,
+  index,
+  currentSlideIndex,
+}: {
+  src: string;
+  type: string;
+  thumbnail: string;
+  index: number;
+  currentSlideIndex: number;
+}) => {
+  if (type === "video") {
+    return (
+      <VideoPlayer
+        src={src}
+        thumbnail={thumbnail}
+        index={index}
+        currentSlideIndex={currentSlideIndex}
+      />
+    );
+  }
+
+  return <img src={src} alt="Media content" className=" object-contain" />;
+};
+
+// ...existing CreatePost component code...
+
+const DropZone = ({
+  onClick,
+  error,
+}: {
+  onClick: () => void;
+  error?: string;
+}) => {
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center p-3 gap-2">
+      {error && (
+        <div className="w-full max-w-md p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500">
+          {error}
+        </div>
+      )}
+
+      <div
+        className="sm:w-4/5 w-[70%] p-5 rounded-xl border-2 hover:border-dashed 
+           border-secondary hover:border-secondary transition-all  cursor-pointer 
+           bg-secondary/5 backdrop-blur-sm group hover:bg-secondary/10"
+        onClick={onClick}
+      >
+        <Button
+          // variant="ghost"
+          className="w-full flex flex-col items-center gap-4 text-secondary 
+            h-auto py-8 px-4 hover:bg-secondary hover:bg-opacity-40
+            transition-all duration-300 group-hover:scale-105 hover:text-secondary rounded-3xl"
+        >
+          <ImagePlus className="w-12 h-12 opacity-90" />
+          <div className="space-y-2 text-center">
+            <h3 className="font-semibold text-lg">Drop your content here</h3>
+            <p className="text-sm text-secondary/70">Share photos and videos</p>
+          </div>
+        </Button>
+      </div>
+    </div>
+  );
+};
