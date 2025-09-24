@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, ImageIcon, Video, Copy, Verified } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-import Carousel from "@/components/ui/Carousel";
+import Carousel from "@/components/ui/carrusel";
 import { useEffect, useState } from "react";
 
 import { User } from "@/types/user_type";
