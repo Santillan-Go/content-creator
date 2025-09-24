@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, ImageIcon, Video, Copy, Verified } from "lucide-react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-import C from "@/components/ui/Carousel";
+import Carousel from "@/components/ui/Carousel";
 import { useEffect, useState } from "react";
 
 import { User } from "@/types/user_type";
@@ -232,7 +232,7 @@ export default function CreatorProfile({ username }: { username: string }) {
               ))}
             </div>
             {carouselState.isOpen && (
-              <C
+              <Carousel
                 media={modelProfile.posts.map((post) => ({
                   url: post.media[0].url,
                   type: post.media[0].type,
