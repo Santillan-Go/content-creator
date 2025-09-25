@@ -123,13 +123,7 @@ export default function AdminPage() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        {currentView === "create" ? (
-          <CreateUser />
-        ) : (
-          <GetSession>
-            <UsersManage />
-          </GetSession>
-        )}
+        {currentView === "create" ? <CreateUser /> : <UsersManage />}
       </div>
     </div>
   );
