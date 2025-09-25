@@ -27,8 +27,9 @@ export default function CreatorsPage({
   const [isDeleting, setIsDeleting] = useState(false);
 
   // MAKE SURE TO SHOW DELETE BUTTON ONLY IF THE USER IS ADMIN AND IT'S ON ADMIN ROOT
-  const session = useSession();
-  const checkIfAdmin = session.data?.user?.name === "admin";
+  const { data: session, status } = useSession();
+  const checkIfAdmin =
+    status === "authenticated" && session?.user?.name === "admin";
   const pathname = usePathname();
   const isAdminRoot = pathname === "/admin";
 
