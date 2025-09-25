@@ -141,7 +141,7 @@ export default function CreatePost({
 
           // Extract the fileName (public_id + extension)
           const fileName = uploadedUrl.split("/").pop().split(".")[0];
-
+          console.log(process.env.NEXT_PUBLIC_CLOUDINARY_NAME);
           return {
             url: uploadedUrl,
             type: isVideo ? "video" : "image",
