@@ -20,7 +20,7 @@ export default function UsersManage() {
           throw new Error("Failed to fetch users");
         }
         const data = await response.json();
-        setCreators(data.users);
+        setCreators(data.users ?? []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {

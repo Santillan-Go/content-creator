@@ -41,19 +41,29 @@ const VerifiedIcon = () => (
 );
 
 const fetchCreatorByUsername = async (username: string) => {
-  const response = await fetch(
-    `https://content-creator-service.vercel.app/get-user/${username}`
-  );
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(
+      `https://content-creator-service.vercel.app/get-user/${username}`
+    );
+    const data = await response.json();
+    return data ?? null;
+  } catch (error) {
+    console.error("Error fetching creator:", error);
+    return null;
+  }
 };
 
 const fetchPostByUsername = async (username: string) => {
-  const response = await fetch(
-    `https://content-creator-service.vercel.app/users/${username}/posts`
-  );
-  const data = await response.json();
-  return data.posts;
+  try {
+    const response = await fetch(
+      `https://content-creator-service.vercel.app/users/${username}/posts`
+    );
+    const data = await response.json();
+    return data.posts ?? [];
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return [];
+  }
 };
 export default async function CreatorProfilePage({
   params,
