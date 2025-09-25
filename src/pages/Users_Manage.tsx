@@ -22,9 +22,9 @@ export default function UsersManage() {
         const data = await response.json();
         setCreators(data.users ?? []);
       } catch (err) {
+        setCreators([]);
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
-        setCreators([]);
         setIsLoading(false);
       }
     };
