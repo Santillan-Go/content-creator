@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import CreatorsPage from "./Creators_Page";
+
 import { User } from "@/types/user_type";
 import FullScreenLoader from "@/components/ui/FullScreenLoader";
+import CreatorsPageAdmin from "./Creators_Admin_Page";
 
 export default function UsersManage() {
   const [creators, setCreators] = useState<User[]>([]);
@@ -51,5 +52,7 @@ export default function UsersManage() {
     );
   }
 
-  return <CreatorsPage creators={creators} onSetCreators={handleSetCreators} />;
+  return (
+    <CreatorsPageAdmin creators={creators} onSetCreators={handleSetCreators} />
+  );
 }

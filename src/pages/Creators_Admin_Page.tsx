@@ -16,9 +16,13 @@ import FullScreenLoader from "@/components/ui/FullScreenLoader";
 
 interface CreatorsPageProps {
   creators: User[];
+  onSetCreators: (creators: User[]) => void; // Changed from setCreators;
 }
 
-export default function CreatorsPage({ creators }: CreatorsPageProps) {
+export default function CreatorsPageAdmin({
+  creators,
+  onSetCreators,
+}: CreatorsPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -71,6 +75,7 @@ export default function CreatorsPage({ creators }: CreatorsPageProps) {
       // setCreators((prevCreators) =>
       //   prevCreators.filter((creator) => creator.id !== userID)
       // );
+      onSetCreators(creators.filter((creator) => creator.id !== userID)); // Changed from setCreators
 
       // Optional: Show success message
       console.log("User deleted successfully");
