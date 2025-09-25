@@ -24,6 +24,7 @@ export default function UsersManage() {
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
+        setCreators([]);
         setIsLoading(false);
       }
     };
