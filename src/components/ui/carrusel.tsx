@@ -259,11 +259,17 @@ export default function Carousel({
                             </Swiper>
                           </>
                         ) : (
-                          <MediaContent
-                            item={mediaItem}
-                            index={index}
-                            currentSlideIndex={currentSlideIndex}
-                          />
+                          <div
+                            className={
+                              "!w-[50%] mx-auto flex-1 flex items-center justify-center bg-black"
+                            }
+                          >
+                            <MediaContent
+                              item={mediaItem}
+                              index={index}
+                              currentSlideIndex={currentSlideIndex}
+                            />
+                          </div>
                         )}
                         <AsideInfoPost
                           likes={currentPost.likes}

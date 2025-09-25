@@ -13,7 +13,10 @@ const generateUsername = (name: string): string => {
 
 export const fetchCreators = async (): Promise<User[] | null> => {
   const response = await fetch(
-    "https://content-creator-service.vercel.app/get-all-users"
+    "https://content-creator-service.vercel.app/get-all-users",
+    {
+      cache: "no-store",
+    }
   );
   const data = await response.json();
   return data.users || null;

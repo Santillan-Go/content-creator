@@ -20,6 +20,14 @@ html {
     height: 100vh !important;
     width: 100% !important;
   }
+  .swiper-pagination-bullet-active {
+    opacity: var(--swiper-pagination-bullet-opacity, 1);
+    background: #e68d10;
+  }
+  .swiper-pagination-bullet {
+    opacity: var(--swiper-pagination-bullet-opacity, 0.2);
+    background: #b3b1ae;
+  }
 }
 
 /* Override Swiper's default styles for vertical mode */

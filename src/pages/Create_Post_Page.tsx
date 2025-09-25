@@ -21,7 +21,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { VideoPlayer } from "@/components/ui/Video_Player";
 import FullScreenLoader from "@/components/ui/FullScreenLoader";
 import { uploadToCloudinary } from "@/services/cloudinary";
-
+import { useRouter } from "next/navigation";
 interface MediaPreview {
   src: string;
   type: string;
@@ -70,7 +70,7 @@ export default function CreatePost({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   // Update handleFileSelect to include validation
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -182,6 +182,7 @@ export default function CreatePost({
         setError("");
 
         console.log("Post created:", data);
+        router.refresh();
       } catch (error) {
         console.error("Error publishing post:", error);
       } finally {
