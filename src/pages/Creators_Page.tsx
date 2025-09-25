@@ -16,12 +16,12 @@ import FullScreenLoader from "@/components/ui/FullScreenLoader";
 
 interface CreatorsPageProps {
   creators: User[];
-  setCreators: React.Dispatch<React.SetStateAction<User[]>>;
+  onSetCreators: (creators: User[]) => void; // Changed from setCreators;
 }
 
 export default function CreatorsPage({
   creators,
-  setCreators,
+  onSetCreators,
 }: CreatorsPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -72,9 +72,10 @@ export default function CreatorsPage({
       }
 
       // Immediately update the UI by removing the user from the state
-      setCreators((prevCreators) =>
-        prevCreators.filter((creator) => creator.id !== userID)
-      );
+      // setCreators((prevCreators) =>
+      //   prevCreators.filter((creator) => creator.id !== userID)
+      // );
+      onSetCreators(creators.filter((creator) => creator.id !== userID)); // Changed from setCreators
 
       // Optional: Show success message
       console.log("User deleted successfully");

@@ -32,6 +32,10 @@ export default function UsersManage() {
     fetchCreators();
   }, []);
 
+  const handleSetCreators = (newCreators: User[]) => {
+    setCreators(newCreators);
+  };
+
   if (isLoading) {
     return <FullScreenLoader isLoading={true} message="Loading users..." />;
   }
@@ -47,5 +51,5 @@ export default function UsersManage() {
     );
   }
 
-  return <CreatorsPage creators={creators} setCreators={setCreators} />;
+  return <CreatorsPage creators={creators} onSetCreators={handleSetCreators} />;
 }

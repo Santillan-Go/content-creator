@@ -424,5 +424,5 @@ export const creators = [
 
 export default async function Page() {
   const creators = await fetchCreators();
-  return <CreatorsPage creators={creators ?? []} setCreators={() => {}} />;
+  return <CreatorsPage creators={creators ?? []} onSetCreators={() => {}} />;
 }
