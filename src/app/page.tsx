@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,8 +9,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ShieldOff, Lock, Zap, Rocket } from "lucide-react";
-import { creators } from "./creators/page";
-import { useState } from "react";
+import { creators, fetchCreators } from "./creators/page";
+
 import { Menu, X } from "lucide-react";
 import Header from "@/components/ui/Header";
 // ...existing imports...
@@ -108,8 +106,9 @@ const features = [
   },
 ];
 
-export default function LandingPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default async function LandingPage() {
+  const usersFound = await fetchCreators();
+
   return (
     <div className="bg-[#161618]  text-white w-full">
       <div>
@@ -124,13 +123,13 @@ export default function LandingPage() {
             <div className="text-center md:text-left">
               <div className="flex justify-center md:justify-start mb-4">
                 <div className="flex -space-x-3">
-                  {[...creators].slice(0, 5).map((creator) => (
+                  {[...usersFound ?? []].slice(0, 5).map((creator) => (
                     <div
                       key={creator.name}
                       className="w-12 h-12 rounded-full border-2 border-[#161618] overflow-hidden"
                     >
                       <Image
-                        src={creator.coverImage}
+                        src={creator.profilePicture}
                         alt={creator.name}
                         width={48}
                         height={48}
@@ -181,7 +180,7 @@ export default function LandingPage() {
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-              {creators.slice(0, 5).map((creator) => (
+              {[...usersFound ?? []].slice(0, 5).map((creator) => (
                 <Link
                   href={`/creators/${creator.username}`}
                   key={creator.name}
@@ -194,7 +193,7 @@ export default function LandingPage() {
                   >
                     <div className="relative aspect-[3/4]">
                       <Image
-                        src={creator.coverImage}
+                        src={creator.profilePicture}
                         alt={creator.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -209,7 +208,7 @@ export default function LandingPage() {
                         {creator.name}
                       </h3>
                       <p className="text-xs text-gray-500 truncate">
-                        {creator.description}
+                        {creator.bio}
                       </p>
                     </div>
                   </Card>

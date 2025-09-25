@@ -1,15 +1,5 @@
-"use client";
-
-import Image from "next/image";
-import Link from "next/link";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, ChevronDown, Eye, Menu } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { useState, useMemo } from "react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import CreatorsPage from "@/pages/Creators_Page";
+import { User } from "@/types/user_type";
 
 const generateUsername = (name: string): string => {
   return name
@@ -17,6 +7,16 @@ const generateUsername = (name: string): string => {
     .replace(/\s+/g, "_") // Replace spaces with underscore
     .replace(/[^a-z0-9_]/g, "") // Remove special characters
     .replace(/_+/g, "_"); // Replace multiple underscores with single
+};
+
+//GET USERS FROM http://localhost:3000/get-all-users
+
+export const fetchCreators = async (): Promise<User[] | null> => {
+  const response = await fetch(
+    "https://content-creator-service.vercel.app/get-all-users"
+  );
+  const data = await response.json();
+  return data.users || null;
 };
 
 export const creators = [
@@ -422,6 +422,7 @@ export const creators = [
   },
 ];
 
-export default function Page() {
-  return <CreatorsPage />;
+export default async function Page() {
+  const creators = await fetchCreators();
+  return <CreatorsPage creators={creators ?? []} setCreators={() => {}} />;
 }

@@ -41,8 +41,8 @@ export function VideoPlayer({
 
   // Different styling for carousel vs regular usage
   const containerStyle = isCarousel
-    ? "relative w-full h-full bg-black flex items-center justify-center cursor-pointer overflow-hidden"
-    : "relative w-full h-full bg-black flex items-center justify-center cursor-pointer overflow-hidden";
+    ? "relative w-full h-full sm:flex-1 bg-black flex items-center justify-center cursor-pointer overflow-hidden"
+    : "relative w-full h-full sm:flex-1 bg-black flex items-center justify-center cursor-pointer overflow-hidden";
 
   const videoStyle = isCarousel
     ? "!object-contain w-full h-full" // Use contain for carousel to fit within container

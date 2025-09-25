@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+/*
+Error: Invalid src prop (https://res.cloudinary.com/dl2ey48x0/image/upload/v1758739044/ygvj1wwfzjwgk2m3abf2.png) on `next/image`, hostname "res.cloudinary.com" is not configured under images in your `next.config.js`
+*/
 const nextConfig: NextConfig = {
   /* config options here */
   typescript: {
@@ -9,8 +12,19 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ["picsum.photos", "cdn.openart.ai", "imgsrc.pub"],
+    domains: [
+      "picsum.photos",
+      "cdn.openart.ai",
+      "imgsrc.pub",
+      "res.cloudinary.com",
+    ],
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
+      },
       {
         protocol: "https",
         hostname: "placehold.co",

@@ -8,6 +8,7 @@ const AsideInfoPost = ({
   showProfile = true,
   className,
   description,
+  image,
 }: {
   likes: number;
   caption: string;
@@ -15,6 +16,7 @@ const AsideInfoPost = ({
   showProfile?: boolean;
   className?: string;
   description?: string;
+  image: string;
 }) => {
   return (
     <aside
@@ -25,6 +27,7 @@ const AsideInfoPost = ({
       {/* User header */}
       {showProfile && (
         <ProfilePlaceholder
+          image={image}
           username={username}
           className="flex justify-between"
         />
@@ -80,10 +83,12 @@ export const ProfilePlaceholder = ({
   username,
   className,
   colorText = "text-gray-900",
+  image,
 }: {
   username: string;
   className?: string;
   colorText?: string;
+  image: string;
 }) => {
   return (
     <div className={`sm:p-6 border-b border-gray-100 `}>
@@ -91,7 +96,10 @@ export const ProfilePlaceholder = ({
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
             <img
-              src="https://cdn.openart.ai/uploads/image_9YFkLViJ_1757401222855_raw.jpg"
+              src={
+                image ??
+                "https://cdn.openart.ai/uploads/image_9YFkLViJ_1757401222855_raw.jpg"
+              }
               alt="Profile"
               className="w-full h-full object-cover"
             />

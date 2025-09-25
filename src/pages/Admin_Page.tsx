@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sheet";
 import Link from "next/link";
 import BackButton from "@/components/ui/Back_Button";
+import GetSession from "@/components/GetSession";
 export default function AdminPage() {
   const [currentView, setCurrentView] = useState<"create" | "users">("create");
 
@@ -122,7 +123,13 @@ export default function AdminPage() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        {currentView === "create" ? <CreateUser /> : <UsersManage />}
+        {currentView === "create" ? (
+          <CreateUser />
+        ) : (
+          <GetSession>
+            <UsersManage />
+          </GetSession>
+        )}
       </div>
     </div>
   );

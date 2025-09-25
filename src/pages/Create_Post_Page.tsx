@@ -19,6 +19,8 @@ import "swiper/css/pagination"; // optional: pagination styles
 import { CreatePostRightSide } from "@/components/ui/Create_Post_Right_Side";
 import { Dialog } from "@/components/ui/dialog";
 import { VideoPlayer } from "@/components/ui/Video_Player";
+import FullScreenLoader from "@/components/ui/FullScreenLoader";
+import { uploadToCloudinary } from "@/services/cloudinary";
 
 interface MediaPreview {
   src: string;
@@ -67,6 +69,7 @@ export default function CreatePost({
   const [error, setError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Update handleFileSelect to include validation
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,9 +125,69 @@ export default function CreatePost({
     };
   }, [previews]);
 
-  const handlePublish = () => {
-    console.log("Publishing:", { files: selectedFiles, description });
-    // Add your publish logic here
+  const handlePublish = async () => {
+    if (
+      description.length > 0 &&
+      description.length < 300 &&
+      selectedFiles.length > 0
+    ) {
+      setIsLoading(true);
+
+      try {
+        // Upload files to Cloudinary
+        const uploadPromises = selectedFiles.map(async (file) => {
+          const isVideo = file.type.startsWith("video/");
+          const uploadedUrl = await uploadToCloudinary(file, false);
+
+          // Extract the fileName (public_id + extension)
+          const fileName = uploadedUrl.split("/").pop().split(".")[0];
+
+          return {
+            url: uploadedUrl,
+            type: isVideo ? "video" : "image",
+            thumbnail: isVideo
+              ? `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/video/upload/so_2/${fileName}.jpg`
+              : uploadedUrl, // for images, use the same URL
+          };
+        });
+
+        const uploadedMedia = await Promise.all(uploadPromises);
+
+        // Send to backend
+        const response = await fetch(
+          "https://content-creator-service.vercel.app/create-post",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              username,
+              caption: description,
+              media: uploadedMedia,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        // Success - close modal and reset state
+        setIsModalOpen(false);
+        setSelectedFiles([]);
+        setPreviews([]);
+        setDescription("");
+        setError("");
+
+        console.log("Post created:", data);
+      } catch (error) {
+        console.error("Error publishing post:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const handleSlideChange = (swiper: SwiperType) => {
@@ -239,6 +302,7 @@ export default function CreatePost({
           />
         </div>
       </Modal>
+      <FullScreenLoader isLoading={isLoading} />
     </>
   );
 }

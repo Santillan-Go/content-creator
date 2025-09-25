@@ -40,14 +40,44 @@ const VerifiedIcon = () => (
   </svg>
 );
 
+const fetchCreatorByUsername = async (username: string) => {
+  const response = await fetch(
+    `https://content-creator-service.vercel.app/get-user/${username}`
+  );
+  const data = await response.json();
+  return data;
+};
+
+const fetchPostByUsername = async (username: string) => {
+  const response = await fetch(
+    `https://content-creator-service.vercel.app/users/${username}/posts`
+  );
+  const data = await response.json();
+  return data.posts;
+};
 export default async function CreatorProfilePage({
   params,
 }: {
   params: { slug: string };
 }) {
   const username = await params;
+
+  const creator = await fetchCreatorByUsername(username.slug);
+
+  if (!creator) {
+    return <div>Creator not found</div>;
+  }
+  const posts = await fetchPostByUsername(username.slug);
   return (
-    <GetSession children={<CreatorProfile username={username.slug} />} />
+    <GetSession
+      children={
+        <CreatorProfile
+          username={username.slug}
+          creator={creator}
+          posts={posts}
+        />
+      }
+    />
     // <SessionProvider>
     //   <CreatorProfile username={username.slug} />
     // </SessionProvider>

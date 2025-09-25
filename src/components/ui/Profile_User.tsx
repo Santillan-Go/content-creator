@@ -51,15 +51,15 @@ const modelProfile: {
         ? {
             url: `https://assets.mixkit.co/videos/34562/34562-720.mp4`,
             type: "video",
-            width: 1080,
-            height: 1080,
+            // width: 1080,
+            // height: 1080,
             thumbnail: `https://picsum.photos/seed/${i * 4 + j + 1}/1080/1080`, // Placeholder thumbnail
           }
         : {
             url: `https://picsum.photos/seed/${i * 4 + j + 1}/1080/1080`,
             type: "image",
-            width: 1080,
-            height: 1080,
+            // width: 1080,
+            // height: 1080,
           };
 
       return media;
@@ -74,7 +74,15 @@ const modelProfile: {
   })),
 };
 
-export default function CreatorProfile({ username }: { username: string }) {
+export default function CreatorProfile({
+  username,
+  creator,
+  posts,
+}: {
+  username: string;
+  creator: User;
+  posts: Post[];
+}) {
   const [carouselState, setCarouselState] = useState<{
     isOpen: boolean;
     startIndex: number;
@@ -87,27 +95,42 @@ export default function CreatorProfile({ username }: { username: string }) {
 
   console.log("Session:", session.data?.user?.name);
 
-  const [userInfo, setUserInfo] = useState<User>({
-    name: "Unknown User",
-    username: "unknown",
-    category: "Unknown",
-    followers: "0",
-    profilePic: "",
-    coverImage: "",
-    dataAiHint: "unknown",
-    description: "No description available",
-  });
+  const [userInfo, setUserInfo] = useState<User>(
+    creator ?? {
+      name: "Unknown User",
+      username: "unknown",
+      category: "Unknown",
+      followers: "0",
+      profilePicture: "",
+      coverPhoto: "",
+      dataAiHint: "unknown",
+      bio: "No description available",
+
+      verify: false,
+      id: "0",
+      stats: {
+        posts: 0,
+        videos: 0,
+        views: 0,
+        followers: 0,
+      },
+      createdAt: {
+        _seconds: 0,
+        _nanoseconds: 0,
+      },
+    }
+  );
 
   const closeModal = () =>
     setCarouselState({ ...carouselState, isOpen: false });
 
-  useEffect(() => {
-    console.log(modelProfile, "this is the model profile");
-    const found = creators.find((creator) => creator.username === username);
-    if (found) {
-      setUserInfo(found);
-    }
-  }, [username]);
+  // useEffect(() => {
+  //   console.log(modelProfile, "this is the model profile");
+  //   const found = creators.find((creator) => creator.username === username);
+  //   if (found) {
+  //     setUserInfo(found);
+  //   }
+  // }, [username]);
 
   const allPostImages = modelProfile.posts
     .map((post) => ({
@@ -121,7 +144,7 @@ export default function CreatorProfile({ username }: { username: string }) {
     <>
       <Header
         username={username}
-        userImage={modelProfile.profilePicture}
+        userImage={userInfo.profilePicture}
         checkIfAdmin={checkIfAdmin}
       />
       <div className="bg-background">
@@ -130,21 +153,21 @@ export default function CreatorProfile({ username }: { username: string }) {
             <Card className="rounded-none sm:rounded-b-lg overflow-hidden border-x-0 border-t-0 sm:border-x">
               <div className="relative w-full h-48 sm:h-64 md:h-80">
                 <Image
-                  src={modelProfile.coverPhoto}
+                  src={userInfo.coverPhoto}
                   alt="Cover photo"
                   fill
                   priority
-                  className="object-cover"
+                  className="object-cover sm:rounded-2xl "
                   data-ai-hint="fashion runway"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent sm:rounded-2xl" />
               </div>
             </Card>
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
               <Avatar className="h-28 w-28 md:h-36 md:w-36 border-4 border-background shadow-lg">
                 <AvatarImage
-                  src={modelProfile.profilePicture}
-                  alt={modelProfile.name}
+                  src={userInfo.profilePicture}
+                  alt={userInfo.name}
                   className="object-cover"
                   data-ai-hint="female model"
                 />
@@ -161,11 +184,11 @@ export default function CreatorProfile({ username }: { username: string }) {
               <Verified className="text-[#0095F6]" />
             </div>
             <p className="text-muted-foreground mt-1">
-              Agency:{" "}
-              <span className="text-foreground">{modelProfile.agency}</span>
+              Category:{" "}
+              <span className="text-foreground">{userInfo.category}</span>
             </p>
             <p className="mt-4 max-w-2xl mx-auto text-sm md:text-base">
-              {modelProfile.bio}
+              {userInfo.bio}
             </p>
           </div>
 
@@ -175,21 +198,21 @@ export default function CreatorProfile({ username }: { username: string }) {
                 <div className="flex flex-col items-center gap-1">
                   <ImageIcon className="h-6 w-6 text-secondary" />
                   <p className="font-semibold text-lg">
-                    {modelProfile.stats.posts}
+                    {userInfo.stats.posts}
                   </p>
                   <p className="text-xs text-muted-foreground">Posts</p>
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <Video className="h-6 w-6 text-secondary" />
                   <p className="font-semibold text-lg">
-                    {modelProfile.stats.videos}
+                    {userInfo.stats.videos}
                   </p>
                   <p className="text-xs text-muted-foreground">Videos</p>
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <Eye className="h-6 w-6 text-secondary" />
                   <p className="font-semibold text-lg">
-                    {modelProfile.stats.views}
+                    {userInfo.stats.views}
                   </p>
                   <p className="text-xs text-muted-foreground">Views</p>
                 </div>
@@ -201,7 +224,7 @@ export default function CreatorProfile({ username }: { username: string }) {
             <Separator className="my-6" />
 
             <div className="grid grid-cols-3 gap-1">
-              {modelProfile.posts.map((post, postIndex) => (
+              {posts.map((post, postIndex) => (
                 <Dialog key={post.id}>
                   <DialogTrigger asChild>
                     <Card
@@ -233,14 +256,15 @@ export default function CreatorProfile({ username }: { username: string }) {
             </div>
             {carouselState.isOpen && (
               <Carousel
-                media={modelProfile.posts.map((post) => ({
+                image={userInfo.profilePicture}
+                media={posts.map((post) => ({
                   url: post.media[0].url,
                   type: post.media[0].type,
                   thumbnail: post.media[0].thumbnail ?? post.media[0].url,
-                  width: post.media[0].width,
-                  height: post.media[0].height,
+                  // width: post.media[0].width,
+                  // height: post.media[0].height,
                 }))}
-                allPosts={modelProfile.posts}
+                allPosts={posts}
                 username={username}
                 initialSlide={carouselState.startIndex}
                 closeModal={closeModal}

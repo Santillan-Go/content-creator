@@ -4,8 +4,6 @@ export interface Media {
   url: string;
   type: MediaType;
   thumbnail?: string;
-  width: number;
-  height: number;
 }
 
 export interface Post {
@@ -27,8 +25,8 @@ export const DEFAULT_POST: Post = {
     {
       url: "",
       type: "image",
-      width: 0,
-      height: 0,
+      // width: 0,
+      // height: 0,
     },
   ],
   caption: "",

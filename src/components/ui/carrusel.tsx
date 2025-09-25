@@ -21,12 +21,14 @@ export default function Carousel({
   username,
   initialSlide = 0,
   allPosts,
+  image,
 }: {
   media: Media[];
   closeModal?: () => void;
   username: string;
   initialSlide?: number;
   allPosts?: Post[];
+  image: string;
 }) {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialSlide);
@@ -160,6 +162,7 @@ export default function Carousel({
                         {/* Media Container */}
                         <div className="h-[70vh] bg-black flex items-center justify-center relative">
                           <ProfilePlaceholder
+                            image={image}
                             username={username}
                             className="absolute top-4 flex justify-center gap-12 w-full z-10"
                             colorText={"text-white"}
@@ -208,6 +211,7 @@ export default function Carousel({
                           username={username}
                           showProfile={false}
                           className={"bg-white"}
+                          image={image}
                         />
                       </div>
                     );
@@ -267,6 +271,7 @@ export default function Carousel({
                           username={username}
                           className={"flex-1 bg-white"}
                           description={"flex-1"}
+                          image={image}
                         />
                       </div>
                     </SwiperSlide>
