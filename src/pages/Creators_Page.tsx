@@ -1,5 +1,5 @@
 "use client";
-export const dynamic = "force-dynamic";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
@@ -30,10 +30,15 @@ export default function CreatorsPage({
   // const { data: session, status } = useSession();
   // const checkIfAdmin =
   //   status === "authenticated" && session?.user?.name === "admin";
-  const session = useSession();
-  const checkIfAdmin = session.data?.user?.name === "admin";
+  // const session = useSession();
+  // const checkIfAdmin = session.data?.user?.name === "admin";
   const pathname = usePathname();
   const isAdminRoot = pathname === "/admin";
+  const sessionData = useSession();
+  const session = sessionData?.data;
+  const status = sessionData?.status || "loading";
+  const checkIfAdmin =
+    status === "authenticated" && session?.user?.name === "admin";
 
   const filteredCreators = useMemo(() => {
     if (!searchQuery) {
