@@ -15,7 +15,7 @@ export default function FullScreenLoader({
   if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black via-primary/90 to-secondary/80 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-gradient-to-br from-black via-primary/90 to-secondary/80 backdrop-blur-sm">
       <div className="bg-background/90 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-border/20 flex flex-col items-center gap-4 max-w-sm mx-4">
         <div className="relative">
           <Loader2 className="w-12 h-12 animate-spin text-secondary" />

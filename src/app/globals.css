@@ -20,16 +20,26 @@ html {
     height: 100vh !important;
     width: 100% !important;
   }
-  .swiper-pagination-bullet-active {
-    opacity: var(--swiper-pagination-bullet-opacity, 1);
-    background: #e68d10;
-  }
-  .swiper-pagination-bullet {
-    opacity: var(--swiper-pagination-bullet-opacity, 0.2);
-    background: #b3b1ae;
-  }
 }
 
+/* .swiper-pagination-bullet-active {
+  opacity: var(--swiper-pagination-bullet-opacity, 1) !important;
+  background: #e68d10;
+}
+.swiper-pagination-bullet {
+  opacity: var(--swiper-pagination-bullet-opacity, 0.2) !important;
+  background: #b3b1ae;
+} */
+
+.swiper .swiper-pagination-bullet {
+  opacity: 0.2 !important;
+  background: #b9b7b3 !important;
+}
+
+.swiper .swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  background: #e68d10 !important;
+}
 /* Override Swiper's default styles for vertical mode */
 .swiper-vertical > .swiper-wrapper {
   flex-direction: column;
@@ -107,6 +117,7 @@ html {
     --sidebar-accent-foreground: #f5f5f5;
     --sidebar-border: #292929;
     --sidebar-ring: #3b82f6;
+    --swiper-pagination-bullet-opacity: 1;
   }
 }
 

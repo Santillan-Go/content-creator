@@ -4,18 +4,38 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Eye, ImageIcon, Video, Copy, Verified } from "lucide-react";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Eye,
+  ImageIcon,
+  Video,
+  Copy,
+  Verified,
+  Edit,
+  Camera,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 import Carousel from "@/components/ui/carrusel";
-import { useEffect, useState } from "react";
 
 import { User } from "@/types/user_type";
-import { creators } from "@/app/creators/page";
 import { Post, Media, MediaType } from "@/types/post_type";
 
 import Header from "./Header";
 import { useSession } from "next-auth/react";
+import { uploadToCloudinary } from "@/services/cloudinary";
+import FullScreenLoader from "./FullScreenLoader";
+import { useRouter } from "next/navigation";
 
 // TODO- MAKE THE LOGIC FOR CAROUSEL - ONE IMAGE & VIDEO
 const modelProfile: {
@@ -90,10 +110,29 @@ export default function CreatorProfile({
     isOpen: false,
     startIndex: 0,
   });
+
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
+    null
+  );
+  const router = useRouter();
+
+  const [profilePreview, setProfilePreview] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  // New state for cover photo
+  const [isCoverUpdateModalOpen, setIsCoverUpdateModalOpen] = useState(false);
+  const [selectedCoverImage, setSelectedCoverImage] = useState<File | null>(
+    null
+  );
+  const [coverPreview, setCoverPreview] = useState<string>("");
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
+
   const session = useSession();
   const checkIfAdmin = session.data?.user?.name === "admin";
 
-  console.log("Session:", session.data?.user?.name);
+  const profileInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null); // New ref for cover input
 
   const [userInfo, setUserInfo] = useState<User>(
     creator ?? {
@@ -124,6 +163,127 @@ export default function CreatorProfile({
   const closeModal = () =>
     setCarouselState({ ...carouselState, isOpen: false });
 
+  const handleProfileFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedProfileImage(file);
+      const objectUrl = URL.createObjectURL(file);
+      setProfilePreview(objectUrl);
+    }
+  };
+
+  // New function for cover photo file change
+  const handleCoverFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedCoverImage(file);
+      const objectUrl = URL.createObjectURL(file);
+      setCoverPreview(objectUrl);
+    }
+  };
+
+  const handleUpdateProfileImage = async () => {
+    if (!selectedProfileImage) {
+      toast.error("Please select an image first.");
+      return;
+    }
+    setIsLoading(true);
+    setIsUploading(true);
+    try {
+      const newProfileUrl = await uploadToCloudinary(
+        selectedProfileImage,
+        true
+      );
+
+      // Update the user info
+      setUserInfo((prev) => ({
+        ...prev,
+        profilePicture: newProfileUrl,
+      }));
+
+      // Here you would typically send the update to your backend
+      const response = await fetch(
+        `https://content-creator-service.vercel.app/update-user/${userInfo.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            profilePicture: newProfileUrl,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile image");
+      }
+
+      toast.success("Profile image updated successfully!");
+      setIsUpdateModalOpen(false);
+      setSelectedProfileImage(null);
+      setProfilePreview("");
+      router.refresh(); // Refresh the page to reflect changes OR  router.reload();
+    } catch (error) {
+      console.error("Error updating profile image:", error);
+      toast.error("Failed to update profile image. Please try again.");
+    } finally {
+      setIsLoading(false);
+      setIsUploading(false);
+    }
+  };
+
+  // New function for updating cover photo
+  const handleUpdateCoverImage = async () => {
+    if (!selectedCoverImage) {
+      toast.error("Please select an image first.");
+      return;
+    }
+    setIsLoading(true);
+    setIsUploadingCover(true);
+    try {
+      const newCoverUrl = await uploadToCloudinary(
+        selectedCoverImage,
+        false // false for cover photo (not profile)
+      );
+
+      // Update the user info
+      setUserInfo((prev) => ({
+        ...prev,
+        coverPhoto: newCoverUrl,
+      }));
+
+      // Here you would typically send the update to your backend
+      const response = await fetch(
+        `https://content-creator-service.vercel.app/update-user/${userInfo.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            coverPhoto: newCoverUrl,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update cover image");
+      }
+
+      toast.success("Cover image updated successfully!");
+      setIsCoverUpdateModalOpen(false);
+      setSelectedCoverImage(null);
+      setCoverPreview("");
+      router.refresh();
+    } catch (error) {
+      console.error("Error updating cover image:", error);
+      toast.error("Failed to update cover image. Please try again.");
+    } finally {
+      setIsLoading(false);
+      setIsUploadingCover(false);
+    }
+  };
   // useEffect(() => {
   //   console.log(modelProfile, "this is the model profile");
   //   const found = creators.find((creator) => creator.username === username);
@@ -147,6 +307,7 @@ export default function CreatorProfile({
         userImage={userInfo.profilePicture}
         checkIfAdmin={checkIfAdmin}
       />
+      <FullScreenLoader isLoading={isLoading} message="Updating profile..." />
       <div className="bg-background">
         <main className="max-w-7xl mx-auto">
           <div className="relative">
@@ -161,18 +322,194 @@ export default function CreatorProfile({
                   data-ai-hint="fashion runway"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent sm:rounded-2xl" />
+
+                {/* Edit Button for Cover Photo - Only show if admin */}
+                {checkIfAdmin && (
+                  <Dialog
+                    open={isCoverUpdateModalOpen}
+                    onOpenChange={setIsCoverUpdateModalOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        className="absolute top-4 right-4 h-8 w-8 rounded-full bg-secondary hover:bg-secondary/90 shadow-lg "
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Update Cover Image</DialogTitle>
+                      </DialogHeader>
+
+                      <div className="space-y-4">
+                        <div className="space-y-2 flex flex-col items-center">
+                          <Label className="text-sm font-medium text-foreground">
+                            New Cover Image
+                          </Label>
+                          <div
+                            onClick={() => coverInputRef.current?.click()}
+                            className="w-full h-32 border-2 border-dashed border-primary/50 hover:border-primary bg-secondary/20 hover:bg-secondary/30 transition-all duration-200 cursor-pointer flex items-center justify-center group relative overflow-hidden rounded-lg"
+                          >
+                            {coverPreview ? (
+                              <>
+                                <img
+                                  src={coverPreview}
+                                  alt="Cover preview"
+                                  className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                                  <Camera className="w-6 h-6 text-white" />
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex flex-col items-center gap-1">
+                                <Camera className="w-8 h-8 text-primary" />
+                                <span className="text-xs text-muted-foreground">
+                                  Upload
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground text-center">
+                            Click to upload new cover image (landscape
+                            recommended)
+                          </p>
+                          <Input
+                            ref={coverInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleCoverFileChange}
+                            className="hidden"
+                          />
+                        </div>
+
+                        <div className="flex gap-2 justify-end">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setIsCoverUpdateModalOpen(false);
+                              setSelectedCoverImage(null);
+                              setCoverPreview("");
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={handleUpdateCoverImage}
+                            disabled={!selectedCoverImage || isUploadingCover}
+                            className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+                          >
+                            {isUploadingCover ? "Updating..." : "Update Image"}
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
             </Card>
+
+            {/* Profile Avatar with Edit Button */}
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
-              <Avatar className="h-28 w-28 md:h-36 md:w-36 border-4 border-background shadow-lg">
-                <AvatarImage
-                  src={userInfo.profilePicture}
-                  alt={userInfo.name}
-                  className="object-cover"
-                  data-ai-hint="female model"
-                />
-                <AvatarFallback>{userInfo?.name.charAt(0)}</AvatarFallback>
-              </Avatar>
+              <div className="relative group">
+                <Avatar className="h-28 w-28 md:h-36 md:w-36 border-4 border-background shadow-lg">
+                  <AvatarImage
+                    src={userInfo.profilePicture}
+                    alt={userInfo.name}
+                    className="object-cover"
+                    data-ai-hint="female model"
+                  />
+                  <AvatarFallback>{userInfo?.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+
+                {/* Edit Button - Only show if admin */}
+                {checkIfAdmin && (
+                  <Dialog
+                    open={isUpdateModalOpen}
+                    onOpenChange={setIsUpdateModalOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full bg-secondary hover:bg-secondary/90 shadow-lg"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Update Profile Image</DialogTitle>
+                      </DialogHeader>
+
+                      <div className="space-y-4">
+                        <div className="space-y-2 flex flex-col items-center">
+                          <Label className="text-sm font-medium text-foreground">
+                            New Profile Image
+                          </Label>
+                          <div
+                            onClick={() => profileInputRef.current?.click()}
+                            className="w-24 h-24 rounded-full border-2 border-dashed border-primary/50 hover:border-primary bg-secondary/20 hover:bg-secondary/30 transition-all duration-200 cursor-pointer flex items-center justify-center group relative overflow-hidden"
+                          >
+                            {profilePreview ? (
+                              <>
+                                <img
+                                  src={profilePreview}
+                                  alt="Profile preview"
+                                  className="w-full h-full object-cover rounded-full"
+                                />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-full">
+                                  <Camera className="w-6 h-6 text-white" />
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex flex-col items-center gap-1">
+                                <Camera className="w-8 h-8 text-primary" />
+                                <span className="text-xs text-muted-foreground">
+                                  Upload
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground text-center">
+                            Click to upload new profile image (square
+                            recommended)
+                          </p>
+                          <Input
+                            ref={profileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileFileChange}
+                            className="hidden"
+                          />
+                        </div>
+
+                        <div className="flex gap-2 justify-end">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setIsUpdateModalOpen(false);
+                              setSelectedProfileImage(null);
+                              setProfilePreview("");
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={handleUpdateProfileImage}
+                            disabled={!selectedProfileImage || isUploading}
+                            className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+                          >
+                            {isUploading ? "Updating..." : "Update Image"}
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </div>
             </div>
           </div>
 

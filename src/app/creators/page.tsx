@@ -1,3 +1,4 @@
+import GetSession from "@/components/GetSession";
 import CreatorsPage from "@/pages/Creators_Page";
 import { User } from "@/types/user_type";
 
@@ -427,5 +428,9 @@ export const creators = [
 
 export default async function Page() {
   const creators = await fetchCreators();
-  return <CreatorsPage creators={creators ?? []} />;
+  return (
+    <GetSession>
+      <CreatorsPage creators={creators ?? []} />
+    </GetSession>
+  );
 }

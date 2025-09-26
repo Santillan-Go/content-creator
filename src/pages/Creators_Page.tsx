@@ -13,6 +13,7 @@ import { User } from "@/types/user_type";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import FullScreenLoader from "@/components/ui/FullScreenLoader";
+import Header from "@/components/ui/Header";
 
 interface CreatorsPageProps {
   creators: User[];
@@ -86,7 +87,7 @@ export default function CreatorsPage({ creators }: CreatorsPageProps) {
   return (
     <>
       <FullScreenLoader isLoading={isDeleting} message="Deleting user..." />
-
+      <Header checkIfAdmin={false} className="bg-white" />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">

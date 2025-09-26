@@ -39,9 +39,10 @@ const getImageDimensions = (
 
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
+
       resolve({
-        width: img.naturalWidth,
-        height: img.naturalHeight,
+        width: img.width,
+        height: img.height,
         name: file.name,
       });
     };
@@ -50,8 +51,6 @@ const getImageDimensions = (
       URL.revokeObjectURL(objectUrl);
       reject(new Error("Failed to load image"));
     };
-
-    img.src = objectUrl;
   });
 };
 

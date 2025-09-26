@@ -60,19 +60,17 @@ const AsideInfoPost = ({
       </div>
 
       {/* Heart button */}
-      <div className="p-6 border-t border-gray-100">
+      {/* <div className="p-6 border-t border-gray-100">
         <button
           className="group flex items-center gap-2 hover:opacity-80 transition-opacity"
-          onClick={() => {
-            /* Add your like logic here */
-          }}
+          onClick={() => {}}
         >
           <Heart className="w-7 h-7 text-gray-900 group-hover:scale-110 transition-transform" />
           <span className="font-medium text-gray-900">
             {formatLikes(likes)}
           </span>
         </button>
-      </div>
+      </div> */}
     </aside>
   );
 };
@@ -108,9 +106,9 @@ export const ProfilePlaceholder = ({
             {username || "Username"}
           </p>
         </div>
-        <button className="text-blue-500 font-medium hover:text-blue-600 transition-colors">
+        {/* <button className="text-blue-500 font-medium hover:text-blue-600 transition-colors">
           Follow
-        </button>
+        </button> */}
       </div>
     </div>
   );

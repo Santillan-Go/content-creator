@@ -123,7 +123,7 @@ export default async function LandingPage() {
             <div className="text-center md:text-left">
               <div className="flex justify-center md:justify-start mb-4">
                 <div className="flex -space-x-3">
-                  {[...usersFound ?? []].slice(0, 5).map((creator) => (
+                  {[...(usersFound ?? [])].slice(0, 5).map((creator) => (
                     <div
                       key={creator.name}
                       className="w-12 h-12 rounded-full border-2 border-[#161618] overflow-hidden"
@@ -180,7 +180,7 @@ export default async function LandingPage() {
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-              {[...usersFound ?? []].slice(0, 5).map((creator) => (
+              {[...(usersFound ?? [])].slice(0, 5).map((creator) => (
                 <Link
                   href={`/creators/${creator.username}`}
                   key={creator.name}
@@ -191,7 +191,7 @@ export default async function LandingPage() {
             shadow-md transition-all duration-300 hover:shadow-xl 
             hover:-translate-y-1 rounded-2xl sm:rounded-2xl h-full"
                   >
-                    <div className="relative aspect-[3/4]">
+                    <div className="relative aspect-square">
                       <Image
                         src={creator.profilePicture}
                         alt={creator.name}

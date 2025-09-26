@@ -220,7 +220,11 @@ export default function Carousel({
               </div>
             ) : (
               <Swiper
-                modules={[Navigation, Pagination]}
+                modules={[]}
+                allowTouchMove={false}
+                simulateTouch={false}
+                noSwiping={true}
+                pagination={{ clickable: false }}
                 spaceBetween={10}
                 slidesPerView={1}
                 initialSlide={initialSlide}
@@ -238,12 +242,12 @@ export default function Carousel({
                         {isIndexACarousel ? (
                           <>
                             <Swiper
-                              modules={[Navigation, Pagination]}
+                              modules={[Pagination]}
                               spaceBetween={10}
                               slidesPerView={1}
                               pagination={{ clickable: true }}
                               loop={true}
-                              className="!w-[50%] mx-auto flex-1 "
+                              className="!w-[60%] mx-auto"
                             >
                               {getCurrentPost(index).media.map(
                                 (item, mediaIndex) => (
@@ -261,7 +265,7 @@ export default function Carousel({
                         ) : (
                           <div
                             className={
-                              "!w-[50%] mx-auto flex-1 flex items-center justify-center bg-black"
+                              "!w-[60%] mx-auto  flex items-center justify-center bg-black"
                             }
                           >
                             <MediaContent
