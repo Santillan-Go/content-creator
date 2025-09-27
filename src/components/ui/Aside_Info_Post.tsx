@@ -9,6 +9,7 @@ const AsideInfoPost = ({
   className,
   description,
   image,
+  colorText,
 }: {
   likes: number;
   caption: string;
@@ -17,6 +18,7 @@ const AsideInfoPost = ({
   className?: string;
   description?: string;
   image: string;
+  colorText?: string;
 }) => {
   return (
     <aside
@@ -54,7 +56,7 @@ const AsideInfoPost = ({
 
       {/* Description */}
       <div className={`overflow-y-auto ${description}`}>
-        <p className="text-gray-700 leading-relaxed">
+        <p className={`text-gray-700 leading-relaxed ${colorText || ""}`}>
           {caption || "No caption available."}
         </p>
       </div>

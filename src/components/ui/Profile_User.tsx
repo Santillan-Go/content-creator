@@ -412,7 +412,7 @@ export default function CreatorProfile({
             </Card>
 
             {/* Profile Avatar with Edit Button */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+            <div className="absolute bottom-9 sm:bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
               <div className="relative group">
                 <Avatar className="h-28 w-28 md:h-36 md:w-36 border-4 border-background shadow-lg">
                   <AvatarImage
@@ -433,7 +433,7 @@ export default function CreatorProfile({
                     <DialogTrigger asChild>
                       <Button
                         size="sm"
-                        className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full bg-secondary hover:bg-secondary/90 shadow-lg"
+                        className="absolute bottom-3 sm:-bottom-2 -right-2 h-8 w-8 rounded-full bg-secondary hover:bg-secondary/90 shadow-lg"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -513,7 +513,7 @@ export default function CreatorProfile({
             </div>
           </div>
 
-          <div className="pt-20 pb-10 px-4 sm:px-6 lg:px-8 text-center">
+          <div className="pt-5 sm:pt-20  sm:pb-10 px-4 sm:px-6 lg:px-8 text-center">
             <div className="flex items-center justify-center gap-2">
               <h1 className="text-3xl md:text-4xl font-bold font-headline">
                 {userInfo?.name || modelProfile.name}
@@ -529,8 +529,8 @@ export default function CreatorProfile({
             </p>
           </div>
 
-          <div className="px-4 sm:px-6 lg:px-8">
-            <Card className="p-4">
+          <div className="px-4  sm:px-6 lg:px-8">
+            <Card className="p-4 pb-0 sm:pb-4 ">
               <div className="flex justify-around items-center text-center">
                 <div className="flex flex-col items-center gap-1">
                   <ImageIcon className="h-6 w-6 text-secondary" />
@@ -557,8 +557,8 @@ export default function CreatorProfile({
             </Card>
           </div>
 
-          <div className="p-4 sm:px-6 lg:px-8">
-            <Separator className="my-6" />
+          <div className="p-4 pt-0  sm:px-6 lg:px-8">
+            <Separator className="my-2 sm:my-6" />
 
             <div className="grid grid-cols-3 gap-1">
               {posts.map((post, postIndex) => (

@@ -105,18 +105,34 @@ export default function Carousel({
 
   return (
     <section className="fixed inset-0 z-50 bg-black bg-opacity-70">
-      <div className="relative h-screen">
+      <div className="relative h-screen bg-black sm:bg-transparent overflow-y-auto sm:overflow-y-hidden">
         {/* Close button */}
-        <button
-          onClick={closeModal}
-          className="absolute top-4 left-6 sm:right-6 sm:left-auto text-white text-2xl font-bold z-50"
-        >
-          {isMobile ? (
-            <ArrowLeft className="h-6 w-6" />
-          ) : (
-            <X className="h-6 w-6" />
-          )}
-        </button>
+
+        {isMobile ? (
+          <div className="sticky top-0 bg-black  z-[999] ">
+            <button
+              onClick={closeModal}
+              className="sm:absolute  ml-3 mt-3  bottom-2  left-6 sm:m-0 sm:right-6 sm:left-auto text-white text-2xl font-bold"
+            >
+              {isMobile ? (
+                <ArrowLeft className="h-6 w-6" />
+              ) : (
+                <X className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={closeModal}
+            className="absolute top-5 ml-3 mt-3   sm:m-0 sm:right-8  text-white text-2xl font-bold z-50 "
+          >
+            {isMobile ? (
+              <ArrowLeft className="h-6 w-6" />
+            ) : (
+              <X className="h-6 w-6" />
+            )}
+          </button>
+        )}
 
         {/* Left Navigation Button */}
         <button
@@ -133,13 +149,13 @@ export default function Carousel({
           className={`
           ${
             isMobile
-              ? "w-full h-full"
+              ? "w-full h-full "
               : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] h-[80vh] max-w-6xl rounded-2xl overflow-hidden shadow-lg flex"
           } 
           bg-black
         `}
         >
-          <div className="relative w-full h-full">
+          <div className={`relative w-full h-full ${isMobile ? " mb-9" : ""}`}>
             {isMobile ? (
               <div className="w-full h-full overflow-y-auto snap-y snap-mandatory">
                 {media.length === 0 ? (
@@ -157,14 +173,14 @@ export default function Carousel({
                         ref={setPostRef(index)}
                         data-index={index}
                         // it was  h-screen
-                        className="h-auto flex flex-col snap-start"
+                        className="h-auto flex flex-col snap-start pt-3"
                       >
                         {/* Media Container */}
-                        <div className="h-[70vh] bg-black flex items-center justify-center relative">
+                        <div className="h-[70vh]  flex items-center justify-center relative p-2 ">
                           <ProfilePlaceholder
                             image={image}
                             username={username}
-                            className="absolute top-4 flex justify-center gap-12 w-full z-10"
+                            className="absolute top-1 left-4 flex justify-start   z-20 "
                             colorText={"text-white"}
                           />
                           {isCarousel ? (
@@ -210,8 +226,9 @@ export default function Carousel({
                           caption={post.caption}
                           username={username}
                           showProfile={false}
-                          className={"bg-white"}
+                          className={" bg-black"}
                           image={image}
+                          colorText={"text-gray-200"}
                         />
                       </div>
                     );
@@ -247,11 +264,14 @@ export default function Carousel({
                               slidesPerView={1}
                               pagination={{ clickable: true }}
                               loop={true}
-                              className="!w-[60%] mx-auto"
+                              className="!w-[60%] mx-auto "
                             >
                               {getCurrentPost(index).media.map(
                                 (item, mediaIndex) => (
-                                  <SwiperSlide key={mediaIndex}>
+                                  <SwiperSlide
+                                    key={mediaIndex}
+                                    className="!flex  !justify-center "
+                                  >
                                     <MediaContent
                                       item={item}
                                       index={index}
