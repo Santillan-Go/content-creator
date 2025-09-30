@@ -105,14 +105,14 @@ export default function Carousel({
 
   return (
     <section className="fixed inset-0 z-50 bg-black bg-opacity-70">
-      <div className="relative h-screen bg-black sm:bg-transparent overflow-y-auto sm:overflow-y-hidden">
+      <div className="relative h-screen bg-white sm:bg-transparent overflow-y-auto sm:overflow-y-hidden">
         {/* Close button */}
 
         {isMobile ? (
-          <div className="sticky top-0 bg-black  z-[999] ">
+          <div className="sticky top-0 bg-white  z-[999] ">
             <button
               onClick={closeModal}
-              className="sm:absolute  ml-3 mt-3  bottom-2  left-6 sm:m-0 sm:right-6 sm:left-auto text-white text-2xl font-bold"
+              className="sm:absolute  ml-3 mt-3  bottom-2  left-6 sm:m-0 sm:right-6 sm:left-auto text-black text-2xl font-bold"
             >
               {isMobile ? (
                 <ArrowLeft className="h-6 w-6" />
@@ -149,10 +149,10 @@ export default function Carousel({
           className={`
           ${
             isMobile
-              ? "w-full h-full "
-              : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] h-[80vh] max-w-6xl rounded-2xl overflow-hidden shadow-lg flex"
+              ? "w-full h-full bg-white "
+              : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] h-[80vh] max-w-6xl rounded-2xl overflow-hidden shadow-lg flex bg-black"
           } 
-          bg-black
+          
         `}
         >
           <div className={`relative w-full h-full ${isMobile ? " mb-9" : ""}`}>
@@ -175,14 +175,20 @@ export default function Carousel({
                         // it was  h-screen
                         className="h-auto flex flex-col snap-start pt-3"
                       >
+                        <ProfilePlaceholder
+                          image={image}
+                          username={username}
+                          className="flex justify-start    z-20 bg-white p-2 "
+                          colorText={"text-black"}
+                        />
                         {/* Media Container */}
-                        <div className="h-[70vh]  flex items-center justify-center relative p-2 ">
-                          <ProfilePlaceholder
+                        <div className="h-auto  flex items-center justify-center relative  bg-black ">
+                          {/* <ProfilePlaceholder
                             image={image}
                             username={username}
-                            className="absolute top-1 left-4 flex justify-start   z-20 "
+                            className="flex justify-start   z-20 bg-white "
                             colorText={"text-white"}
-                          />
+                          /> */}
                           {isCarousel ? (
                             <div className="w-full h-full relative">
                               <Swiper
@@ -195,7 +201,7 @@ export default function Carousel({
                                     return `<span class="${className} bg-white opacity-50 w-2 h-2 rounded-full mx-1"></span>`;
                                   },
                                 }}
-                                className="w-full h-full"
+                                className="w-full h-full bg-black"
                               >
                                 {post.media.map((item, mediaIndex) => (
                                   <SwiperSlide
@@ -226,9 +232,9 @@ export default function Carousel({
                           caption={post.caption}
                           username={username}
                           showProfile={false}
-                          className={" bg-black"}
+                          className={" bg-white"}
                           image={image}
-                          colorText={"text-gray-200"}
+                          colorText={"text-black"}
                         />
                       </div>
                     );
@@ -264,7 +270,7 @@ export default function Carousel({
                               slidesPerView={1}
                               pagination={{ clickable: true }}
                               loop={true}
-                              className="!w-[60%] mx-auto "
+                              className="!w-[60%] mx-auto bg-black "
                             >
                               {getCurrentPost(index).media.map(
                                 (item, mediaIndex) => (
@@ -352,7 +358,7 @@ export const MediaContent = ({
     <img
       src={item.url}
       alt="Media content"
-      className=" object-contain h-full "
+      className=" object-contain h-full outline-none"
     />
   );
 };
@@ -374,6 +380,7 @@ const MobileMediaContent = ({
         thumbnail={item.thumbnail || ""}
         index={index}
         isCarousel={true}
+        className="!object-cover"
       />
     );
   }
@@ -382,7 +389,7 @@ const MobileMediaContent = ({
     <img
       src={item.url}
       alt="Media content"
-      className="w-full h-full object-contain"
+      className="w-full h-full object-contain bg-black"
     />
   );
 };

@@ -11,6 +11,7 @@ export function VideoPlayer({
   currentSlideIndex,
   isCarousel = false, // New prop to distinguish carousel usage
   aspectRatio = "9/16", // Make aspect ratio configurable
+  className = "",
 }: {
   src: string;
   thumbnail: string;
@@ -18,6 +19,7 @@ export function VideoPlayer({
   currentSlideIndex: number;
   isCarousel?: boolean;
   aspectRatio?: string;
+  className?: string;
 }) {
   const playerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -50,7 +52,7 @@ export function VideoPlayer({
 
   return (
     <div
-      className={containerStyle}
+      className={`  ${containerStyle} `}
       style={!isCarousel ? { aspectRatio } : {}} // Only apply aspect ratio when not in carousel
       onClick={() => setIsPlaying(!isPlaying)}
     >
@@ -62,7 +64,7 @@ export function VideoPlayer({
         height="100%"
         muted={muted}
         loop={false}
-        className={videoStyle}
+        className={`  ${videoStyle} ${className}`}
       />
 
       {/* Center play overlay */}

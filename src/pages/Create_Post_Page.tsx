@@ -3,12 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+
 import { ImagePlus, X, UserCircle2, MapPin } from "lucide-react";
-import ReactPlayer from "react-player";
-import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import type { Swiper as SwiperType } from "swiper";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "@/styles/video-player.css";
@@ -21,7 +18,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { VideoPlayer } from "@/components/ui/Video_Player";
 import FullScreenLoader from "@/components/ui/FullScreenLoader";
 import { uploadToCloudinary } from "@/services/cloudinary";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 interface MediaPreview {
   src: string;
   type: string;
@@ -29,17 +26,39 @@ interface MediaPreview {
 }
 
 // Add this helper function at the top of your file, outside the component
+// const getImageDimensions = (
+//   file: File
+// ): Promise<{ width: number; height: number; name: string }> => {
+//   return new Promise((resolve, reject) => {
+//     // Create HTMLImageElement instead of using Next.js Image
+//     const img = document.createElement("img");
+//     const objectUrl = URL.createObjectURL(file);
+
+//     img.onload = () => {
+//       URL.revokeObjectURL(objectUrl);
+
+//       resolve({
+//         width: img.width,
+//         height: img.height,
+//         name: file.name,
+//       });
+//     };
+
+//     img.onerror = () => {
+//       URL.revokeObjectURL(objectUrl);
+//       reject(new Error("Failed to load image"));
+//     };
+//   });
+// };
 const getImageDimensions = (
   file: File
 ): Promise<{ width: number; height: number; name: string }> => {
   return new Promise((resolve, reject) => {
-    // Create HTMLImageElement instead of using Next.js Image
     const img = document.createElement("img");
     const objectUrl = URL.createObjectURL(file);
 
     img.onload = () => {
       URL.revokeObjectURL(objectUrl);
-
       resolve({
         width: img.width,
         height: img.height,
@@ -51,6 +70,9 @@ const getImageDimensions = (
       URL.revokeObjectURL(objectUrl);
       reject(new Error("Failed to load image"));
     };
+
+    // ✅ Load the file
+    img.src = objectUrl;
   });
 };
 
@@ -69,20 +91,22 @@ export default function CreatePost({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
   // Update handleFileSelect to include validation
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setError(""); // Reset error state
-
+    console.log(files, "FILES");
     try {
       // Validate each image
       for (const file of files) {
+        console.log(file, "INSIDE");
         if (file.type.startsWith("image/")) {
-          const dimensions = await getImageDimensions(file);
-
-          if (dimensions.width < 1000 || dimensions.height < 1000) {
-            setError(`${dimensions.name} must be at least 1000x1000 pixels`);
+          console.log("IMAGE, INSIDE");
+          const { width, height } = await getImageDimensions(file);
+          console.log({ width, height });
+          if (width < 1000 || height < 1000) {
+            setError(`${file.name} must be at least 1000x1000 pixels`);
             setSelectedFiles([]);
             setPreviews([]);
             if (fileInputRef.current) {
@@ -98,6 +122,14 @@ export default function CreatePost({
       // Create preview URLs with type detection
       const newPreviews = files.map((file) => {
         const isVideo = file.type.startsWith("video/");
+        console.log({ isVideo });
+        console.log({
+          src: URL.createObjectURL(file),
+          type: isVideo ? "video" : "image",
+          thumbnail: isVideo
+            ? URL.createObjectURL(file)
+            : URL.createObjectURL(file),
+        });
         return {
           src: URL.createObjectURL(file),
           type: isVideo ? "video" : "image",
@@ -108,6 +140,7 @@ export default function CreatePost({
       });
       setPreviews(newPreviews);
     } catch (err) {
+      console.error("Error processing images:", err);
       setError("Error processing images. Please try again.");
       setSelectedFiles([]);
       setPreviews([]);
@@ -119,11 +152,15 @@ export default function CreatePost({
 
   // Clean up URLs on unmount
   useEffect(() => {
+    console.log(previews);
     return () => {
       previews.forEach((preview) => URL.revokeObjectURL(preview.src));
     };
   }, [previews]);
 
+  useEffect(() => {
+    console.log({ previews });
+  }, [previews]);
   const handlePublish = async () => {
     if (
       description.length > 0 &&
@@ -181,7 +218,7 @@ export default function CreatePost({
         setError("");
 
         console.log("Post created:", data);
-        router.refresh();
+        // router.refresh();
       } catch (error) {
         console.error("Error publishing post:", error);
       } finally {
@@ -302,7 +339,7 @@ export default function CreatePost({
           />
         </div>
       </Modal>
-      <FullScreenLoader isLoading={isLoading} />
+      <FullScreenLoader isLoading={isLoading} message="Uploading..." />
     </>
   );
 }
@@ -331,7 +368,13 @@ const MediaContent = ({
     );
   }
 
-  return <img src={src} alt="Media content" className=" object-contain" />;
+  return (
+    <img
+      src={src}
+      alt="Media content"
+      className=" w-full h-full object-cover"
+    />
+  );
 };
 
 // ...existing CreatePost component code...
