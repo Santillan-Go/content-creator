@@ -35,7 +35,7 @@ export function VideoPlayer({
   };
 
   useEffect(() => {
-    console.log({ index, currentSlideIndex });
+    // console.log({ index, currentSlideIndex });
     if (index !== currentSlideIndex) {
       setIsPlaying(false);
     }

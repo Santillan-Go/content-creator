@@ -13,3 +13,29 @@ export const formatLikes = (likes: number): string => {
   }
   return likes.toString();
 };
+
+export const getImageDimensions = (
+  file: File
+): Promise<{ width: number; height: number; name: string }> => {
+  return new Promise((resolve, reject) => {
+    const img = document.createElement("img");
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve({
+        width: img.width,
+        height: img.height,
+        name: file.name,
+      });
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Failed to load image"));
+    };
+
+    // ✅ Load the file
+    img.src = objectUrl;
+  });
+};

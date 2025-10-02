@@ -5,7 +5,6 @@ import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/button";
 
 import { ImagePlus, X, UserCircle2, MapPin } from "lucide-react";
-
 import type { Swiper as SwiperType } from "swiper";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "@/styles/video-player.css";
@@ -19,62 +18,12 @@ import { VideoPlayer } from "@/components/ui/Video_Player";
 import FullScreenLoader from "@/components/ui/FullScreenLoader";
 import { uploadToCloudinary } from "@/services/cloudinary";
 import { useRouter } from "next/navigation";
+import { getImageDimensions } from "@/lib/utils";
 interface MediaPreview {
   src: string;
   type: string;
   thumbnail: string;
 }
-
-// Add this helper function at the top of your file, outside the component
-// const getImageDimensions = (
-//   file: File
-// ): Promise<{ width: number; height: number; name: string }> => {
-//   return new Promise((resolve, reject) => {
-//     // Create HTMLImageElement instead of using Next.js Image
-//     const img = document.createElement("img");
-//     const objectUrl = URL.createObjectURL(file);
-
-//     img.onload = () => {
-//       URL.revokeObjectURL(objectUrl);
-
-//       resolve({
-//         width: img.width,
-//         height: img.height,
-//         name: file.name,
-//       });
-//     };
-
-//     img.onerror = () => {
-//       URL.revokeObjectURL(objectUrl);
-//       reject(new Error("Failed to load image"));
-//     };
-//   });
-// };
-const getImageDimensions = (
-  file: File
-): Promise<{ width: number; height: number; name: string }> => {
-  return new Promise((resolve, reject) => {
-    const img = document.createElement("img");
-    const objectUrl = URL.createObjectURL(file);
-
-    img.onload = () => {
-      URL.revokeObjectURL(objectUrl);
-      resolve({
-        width: img.width,
-        height: img.height,
-        name: file.name,
-      });
-    };
-
-    img.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
-      reject(new Error("Failed to load image"));
-    };
-
-    // ✅ Load the file
-    img.src = objectUrl;
-  });
-};
 
 export default function CreatePost({
   userImage,
@@ -96,15 +45,13 @@ export default function CreatePost({
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setError(""); // Reset error state
-    console.log(files, "FILES");
+
     try {
       // Validate each image
       for (const file of files) {
-        console.log(file, "INSIDE");
         if (file.type.startsWith("image/")) {
-          console.log("IMAGE, INSIDE");
           const { width, height } = await getImageDimensions(file);
-          console.log({ width, height });
+
           if (width < 1000 || height < 1000) {
             setError(`${file.name} must be at least 1000x1000 pixels`);
             setSelectedFiles([]);
@@ -122,14 +69,7 @@ export default function CreatePost({
       // Create preview URLs with type detection
       const newPreviews = files.map((file) => {
         const isVideo = file.type.startsWith("video/");
-        console.log({ isVideo });
-        console.log({
-          src: URL.createObjectURL(file),
-          type: isVideo ? "video" : "image",
-          thumbnail: isVideo
-            ? URL.createObjectURL(file)
-            : URL.createObjectURL(file),
-        });
+
         return {
           src: URL.createObjectURL(file),
           type: isVideo ? "video" : "image",
@@ -152,15 +92,11 @@ export default function CreatePost({
 
   // Clean up URLs on unmount
   useEffect(() => {
-    console.log(previews);
     return () => {
       previews.forEach((preview) => URL.revokeObjectURL(preview.src));
     };
   }, [previews]);
 
-  useEffect(() => {
-    console.log({ previews });
-  }, [previews]);
   const handlePublish = async () => {
     if (
       description.length > 0 &&
@@ -170,20 +106,21 @@ export default function CreatePost({
       setIsLoading(true);
 
       try {
-        // Upload files to Cloudinary
+        //
         const uploadPromises = selectedFiles.map(async (file) => {
           const isVideo = file.type.startsWith("video/");
           const uploadedUrl = await uploadToCloudinary(file, false);
 
           // Extract the fileName (public_id + extension)
           const fileName = uploadedUrl.split("/").pop().split(".")[0];
-          console.log(process.env.NEXT_PUBLIC_CLOUDINARY_NAME);
+
+          //url, thumbnail, type
           return {
             url: uploadedUrl,
             type: isVideo ? "video" : "image",
             thumbnail: isVideo
               ? `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/video/upload/so_2/${fileName}.jpg`
-              : uploadedUrl, // for images, use the same URL
+              : uploadedUrl,
           };
         });
 
@@ -217,7 +154,6 @@ export default function CreatePost({
         setDescription("");
         setError("");
 
-        console.log("Post created:", data);
         router.refresh();
       } catch (error) {
         console.error("Error publishing post:", error);
@@ -270,38 +206,6 @@ export default function CreatePost({
               />
             </>
           ) : (
-            // <div className="flex-1 flex items-center justify-center p-8">
-            //   <input
-            //     type="file"
-            //     accept="image/*,video/*"
-            //     multiple
-            //     className="hidden"
-            //     ref={fileInputRef}
-            //     onChange={handleFileSelect}
-            //   />
-            //   {error && (
-            //     <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500">
-            //       {error}
-            //     </div>
-            //   )}
-            //   <div
-            //     className="p-8 rounded-xl border-2 border-dashed border-white/20 hover:border-primary/50 transition-colors cursor-pointer bg-white/5"
-            //     onClick={() => fileInputRef.current?.click()}
-            //   >
-            //     <Button
-            //       variant="ghost"
-            //       className="flex flex-col items-center gap-4 text-white h-auto py-6  hover:bg-gradient-to-r from-primary/50 to-secondary/50 transition-all duration-300"
-            //     >
-            //       <ImagePlus className="w-12 h-12 opacity-80" />
-            //       <div className="space-y-2 ">
-            //         <h3 className="font-semibold text-lg">
-            //           Drop your images here
-            //         </h3>
-            //         <p className="text-sm text-white/60">or click to upload</p>
-            //       </div>
-            //     </Button>
-            //   </div>
-            // </div>
             <Swiper
               modules={[Navigation, Pagination]}
               spaceBetween={0}

@@ -127,7 +127,7 @@ export default function CreateUser() {
       });
       setSelectedProfile(undefined);
       setSelectedCoverPhoto(undefined);
-      console.log("Form submitted with files:", formData);
+      // console.log("Form submitted with files:", formData);
       toast.success("User created successfully!");
     } catch (error) {
       toast.error("Error uploading images or creating user.");

@@ -23,12 +23,6 @@ export default function CreatorsPage({ creators }: CreatorsPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // MAKE SURE TO SHOW DELETE BUTTON ONLY IF THE USER IS ADMIN AND IT'S ON ADMIN ROOT
-  // const { data: session, status } = useSession();
-  // const checkIfAdmin =
-  //   status === "authenticated" && session?.user?.name === "admin";
-  // const session = useSession();
-  // const checkIfAdmin = session.data?.user?.name === "admin";
   const pathname = usePathname();
   const isAdminRoot = pathname === "/admin";
   const sessionData = useSession();
@@ -74,7 +68,6 @@ export default function CreatorsPage({ creators }: CreatorsPageProps) {
       // );
 
       // Optional: Show success message
-      console.log("User deleted successfully");
     } catch (error) {
       console.error("Error deleting user:", error);
       // Optional: Show error message to user

@@ -24,13 +24,12 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login attempt:", formData);
+
     signIn("credentials", {
       username: formData.username,
       password: formData.password,
       callbackUrl: "/admin",
     });
-    // Add your login logic here
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
